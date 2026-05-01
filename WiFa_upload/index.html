@@ -1,0 +1,1850 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>WiFa Trainer</title>
+
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#b794f6">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f2ff;
+      color: #2d1f46;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .top-nav {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 10px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-weight: bold;
+      font-size: 18px;
+      color: #2d1f46;
+      padding: 8px 10px;
+    }
+
+    .nav-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .nav-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: #efe7ff;
+      color: #2d1f46;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s ease;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: #cdb7ff;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 44px;
+      left: 0;
+      min-width: 230px;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      padding: 8px;
+      z-index: 1000;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #2d1f46;
+      text-align: left;
+      padding: 11px 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .dropdown-content button:hover {
+      background: #efe7ff;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #d9c7ff, #efe7ff);
+      border-radius: 20px;
+      padding: 20px 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+    }
+
+    .header p {
+      margin: 0;
+      font-size: 15px;
+      color: #4a3970;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .home-tile {
+      background: #faf7ff;
+      border: 1px solid #eadfff;
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .home-tile h3 {
+      margin: 0 0 8px 0;
+      font-size: 17px;
+    }
+
+    .home-tile p {
+      margin: 0 0 12px 0;
+      line-height: 1.5;
+      color: #5a4a80;
+      font-size: 14px;
+    }
+
+    .section-title {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #4a3970;
+    }
+
+    .subject-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .subject-btn,
+    .action-btn,
+    .secondary-btn,
+    .danger-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .subject-btn {
+      background: #efe7ff;
+      color: #2d1f46;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .subject-btn:hover {
+      background: #e3d5ff;
+    }
+
+    .subject-btn.active {
+      background: #cdb7ff;
+    }
+
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #efe7ff;
+      color: #4a3970;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .question-box {
+      background: #faf7ff;
+      border: 1px solid #eadfff;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 14px;
+      white-space: pre-wrap;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+      border: 1px solid #d8c8f8;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+      outline: none;
+      background: #fff;
+    }
+
+    textarea:focus {
+      border-color: #b794f6;
+      box-shadow: 0 0 0 3px rgba(183, 148, 246, 0.15);
+    }
+
+    select,
+    input[type="text"] {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid #d8c8f8;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+      outline: none;
+      background: #fff;
+      color: #2d1f46;
+    }
+
+    select:focus,
+    input[type="text"]:focus {
+      border-color: #b794f6;
+      box-shadow: 0 0 0 3px rgba(183, 148, 246, 0.15);
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .action-btn {
+      background: #b794f6;
+      color: white;
+      font-weight: bold;
+    }
+
+    .action-btn:hover {
+      background: #a77ff3;
+    }
+
+    .secondary-btn {
+      background: #efe7ff;
+      color: #2d1f46;
+      font-weight: bold;
+    }
+
+    .secondary-btn:hover {
+      background: #e3d5ff;
+    }
+
+    .danger-btn {
+      background: #f4cccc;
+      color: #6b1f1f;
+      font-weight: bold;
+    }
+
+    .danger-btn:hover {
+      background: #efbcbc;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .stat-box {
+      background: #faf7ff;
+      border: 1px solid #eadfff;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .stat-title {
+      font-size: 14px;
+      color: #5a4a80;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2d1f46;
+      margin-bottom: 8px;
+    }
+
+    .stat-sub {
+      font-size: 13px;
+      color: #5a4a80;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #eadfff;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #b794f6;
+      transition: width 0.3s ease;
+    }
+
+    .result-list-wrap {
+      margin-top: 16px;
+    }
+
+    .result-list-empty {
+      background: #faf7ff;
+      border: 1px solid #eadfff;
+      border-radius: 14px;
+      padding: 14px;
+      color: #5a4a80;
+    }
+
+    .result-mini-entry {
+      background: #faf7ff;
+      border: 1px solid #eadfff;
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .result-mini-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .result-mini-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #2d1f46;
+    }
+
+    .result-mini-score {
+      font-size: 14px;
+      font-weight: bold;
+      color: #4a3970;
+    }
+
+    .result-mini-bar {
+      width: 100%;
+      height: 10px;
+      background: #eadfff;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .result-mini-fill {
+      height: 100%;
+      background: #b794f6;
+      transition: width 0.3s ease;
+    }
+
+    .result-mini-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: #5a4a80;
+    }
+
+    .result-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #f4eeff;
+      border: 1px solid #e2d3ff;
+      display: none;
+    }
+
+    .result-title {
+      margin: 0 0 10px 0;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .result-text {
+      margin: 0 0 10px 0;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .points {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .points.good {
+      color: #1f8b4c;
+    }
+
+    .points.bad {
+      color: #c0392b;
+    }
+
+    .solution-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #eefaf0;
+      border: 1px solid #cfe8d3;
+      color: #1d5e2e;
+      display: none;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #5a4a80;
+      white-space: pre-wrap;
+    }
+
+    .placeholder-box {
+      background: #faf7ff;
+      border: 1px dashed #cdb7ff;
+      border-radius: 16px;
+      padding: 16px;
+      line-height: 1.6;
+      color: #5a4a80;
+    }
+
+    @media (min-width: 700px) {
+      .app {
+        padding: 24px;
+      }
+
+      .header {
+        padding: 24px;
+      }
+
+      .header h1 {
+        font-size: 30px;
+      }
+
+      .nav-actions {
+        width: auto;
+      }
+
+      .home-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .subject-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .button-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      textarea {
+        min-height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="container">
+
+      <nav class="top-nav">
+        <div class="brand">WiFa Trainer</div>
+
+        <div class="nav-actions">
+          <button class="nav-btn active" id="navStart" onclick="zeigeBereich('startView')">Start</button>
+
+          <div class="dropdown">
+            <button class="nav-btn" id="navTrainer" type="button">WIFA Trainer ▾</button>
+            <div class="dropdown-content">
+              <button type="button" onclick="oeffneTrainerMitTeilbereich('HQ')">HQ – Handlungsspezifische Qualifikationen</button>
+              <button type="button" onclick="oeffneTrainerMitTeilbereich('WQ')">WQ – Wirtschaftsbezogene Qualifikationen</button>
+              <button type="button" onclick="zeigeBereich('trainerView')">Trainer öffnen</button>
+            </div>
+          </div>
+
+          <button class="nav-btn" id="navLernstand" onclick="zeigeBereich('lernstandView')">Lernstand</button>
+          <button class="nav-btn" id="navGlossar" onclick="zeigeBereich('glossarView')">Glossar</button>
+          <button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
+          <button class="nav-btn" onclick="hinweisAnzeigen()">Nutzungshinweis</button>
+        </div>
+      </nav>
+
+      <section class="view active" id="startView">
+        <div class="header">
+          <h1>WiFa Trainer</h1>
+          <p>Dein Lernbereich für Wirtschaftsfachwirt-Themen: Fragen üben, Antworten auswerten lassen und Lernstand sichtbar machen.</p>
+        </div>
+
+        <div class="home-grid">
+          <div class="home-tile">
+            <h3>WIFA Trainer</h3>
+            <p>Starte den Fragenmodus nach Teilbereich, Fach und Thema.</p>
+            <button class="action-btn" onclick="zeigeBereich('trainerView')">Trainer öffnen</button>
+          </div>
+
+          <div class="home-tile">
+            <h3>Lernstand</h3>
+            <p>Hier entsteht die Übersicht über gespeicherte Ergebnisse und Fortschritt.</p>
+            <button class="secondary-btn" onclick="zeigeBereich('lernstandView')">Lernstand ansehen</button>
+          </div>
+
+          <div class="home-tile">
+            <h3>Glossar</h3>
+            <p>Fachbegriffe, Synonyme und kurze Erklärungen werden hier später gesammelt.</p>
+            <button class="secondary-btn" onclick="zeigeBereich('glossarView')">Glossar öffnen</button>
+          </div>
+
+          <div class="home-tile">
+            <h3>Wissensdatenbank</h3>
+            <p>Zusammenfassungen, Merksätze, Beispiele und spätere Karteikarten bekommen hier ihren Platz.</p>
+            <button class="secondary-btn" onclick="zeigeBereich('wissenView')">Wissen öffnen</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="trainerView">
+        <div class="header">
+          <h1>WIFA Trainer</h1>
+          <p>Teilbereich, Fach und Thema auswählen, Antwort eingeben und direkt auswerten lassen.</p>
+        </div>
+
+        <div class="card" id="subjectCard">
+          <h2 class="section-title">Auswahl</h2>
+
+          <label class="label" for="teilbereichSelect">Teilbereich auswählen</label>
+          <select id="teilbereichSelect" onchange="waehleTeilbereich()">
+            <option value="">-- Teilbereich wählen --</option>
+            <option value="WQ">Wirtschaftsbezogene Qualifikationen</option>
+            <option value="HQ">Handlungsspezifische Qualifikationen</option>
+          </select>
+
+          <div id="fachBereich" style="display:none; margin-top:15px;">
+            <label class="label" for="fachSelect">Fach auswählen</label>
+            <select id="fachSelect" onchange="waehleFachAusDropdown()">
+              <option value="">-- Fach wählen --</option>
+            </select>
+          </div>
+
+          <div id="themaBereich" style="display:none; margin-top:15px;">
+            <label class="label" for="themaSelect">Thema auswählen</label>
+            <select id="themaSelect">
+              <option value="">-- Thema wählen --</option>
+            </select>
+
+            <div style="margin-top:10px;">
+              <button class="action-btn" type="button" onclick="starteThema()" style="max-width:220px;">
+                Thema starten
+              </button>
+            </div>
+          </div>
+
+          <div class="status" id="fachStatus">Bitte zuerst einen Teilbereich auswählen.</div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Lernstand dieser Session</h2>
+
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-title">Aktuelles Fach</div>
+              <div class="stat-value" id="fachProzent">0%</div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="fachProgressBar"></div>
+              </div>
+              <div class="stat-sub" id="fachDetails">0 von 0 Punkten im aktuellen Fach</div>
+            </div>
+
+            <div class="stat-box">
+              <div class="stat-title">Gesamte Lernsession</div>
+              <div class="stat-value" id="sessionProzent">0%</div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="sessionProgressBar"></div>
+              </div>
+              <div class="stat-sub" id="sessionDetails">0 von 0 Punkten in dieser Session</div>
+            </div>
+          </div>
+
+          <div class="button-row" style="margin-top:14px;">
+            <button class="danger-btn" onclick="resetSession()">Session zurücksetzen</button>
+          </div>
+
+          <div class="result-list-wrap">
+            <h3 class="section-title" style="margin-top:16px;">Einzelergebnisse</h3>
+            <div id="einzelergebnisListe" class="result-list-empty">Noch keine Ergebnisse in dieser Session.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Frage</h2>
+
+          <div class="question-meta">
+            <span class="badge" id="anzeigeTeilbereich">Kein Teilbereich</span>
+            <span class="badge" id="anzeigeFach">Kein Fach</span>
+            <span class="badge" id="anzeigeThema">Bitte Thema wählen</span>
+          </div>
+
+          <div class="question-box" id="frageText">
+            Bitte zuerst Teilbereich, Fach und Thema auswählen.
+          </div>
+
+          <label class="label" for="antwortInput">Deine Antwort</label>
+          <textarea id="antwortInput" placeholder="Schreibe hier deine Antwort..."></textarea>
+
+          <div class="button-row">
+            <button class="action-btn" onclick="bewerteAntwort()">Auswertung starten</button>
+            <button class="secondary-btn" onclick="naechsteFrage()">Nächste Frage</button>
+            <button class="secondary-btn" onclick="zeigeMusterloesung()">Musterlösung anzeigen</button>
+            <button class="secondary-btn" onclick="antwortLeeren()">Antwort leeren</button>
+          </div>
+
+          <div class="result-box" id="resultBox">
+            <div class="result-title">Auswertung</div>
+            <div class="points" id="punkteAnzeige">0 / 0 Punkte</div>
+            <p class="result-text" id="ergebnisText">Hier erscheint die Bewertung.</p>
+
+            <div class="solution-box" id="solutionBox">
+              <strong>Musterlösung:</strong>
+              <div id="musterloesungText"></div>
+            </div>
+          </div>
+
+          <div class="status" id="ladeStatus"></div>
+        </div>
+      </section>
+
+      <section class="view" id="lernstandView">
+        <div class="header">
+          <h1>Lernstand</h1>
+          <p>Hier siehst du deinen gespeicherten Lernstand als Fachübersicht. Einzelne Versuche kannst du bei Bedarf aufklappen.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Gespeicherter Lernstand</h2>
+
+          <button class="action-btn" onclick="ladeLernstand()" style="max-width:240px;">
+            Lernstand aktualisieren
+          </button>
+
+          <div class="status" id="lernstandStatus">Noch nicht geladen.</div>
+
+          <div id="lernstandListe" class="result-list-empty" style="margin-top:14px;">
+            Klicke auf „Lernstand aktualisieren“.
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="glossarView">
+        <div class="header">
+          <h1>Glossar</h1>
+          <p>Fachbegriffe, kurze Erklärungen und Synonyme zum schnellen Nachschlagen.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Glossar-Suche</h2>
+
+          <div class="button-row" style="margin-bottom:12px;">
+            <button class="action-btn" onclick="ladeGlossar()">Glossar laden</button>
+          </div>
+
+          <input type="text" id="glossarSuche" placeholder="Begriff, Fach, Thema oder Synonym suchen..." oninput="filtereGlossar()">
+
+          <div class="status" id="glossarStatus">Noch nicht geladen.</div>
+
+          <div id="glossarListe" class="result-list-empty" style="margin-top:14px;">
+            Klicke auf „Glossar laden“.
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="wissenView">
+        <div class="header">
+          <h1>Wissensdatenbank</h1>
+          <p>Zusammenfassungen, Merksätze, Beispiele und später Karteikartenmodus.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Wissensbereich</h2>
+          <div class="placeholder-box">
+            Hier entsteht später ein Zugriff auf Lerninhalte nach Teilbereich, Fach und Thema. Daraus können später Karteikarten, Audio oder Kurzabfragen entstehen.
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <button id="hinweisInfoButton" onclick="hinweisAnzeigen()" style="
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 9998;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 999px;
+    background: #fff3cd;
+    color: #8a5a00;
+    font-size: 13px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    cursor: pointer;
+  ">
+    Nutzungshinweis
+  </button>
+
+  <div id="hinweisOverlay" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+  ">
+    <div style="
+      background: #fffdf7;
+      border: 3px solid #f0b429;
+      padding: 22px;
+      border-radius: 18px;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+      text-align: left;
+      font-family: Arial, sans-serif;
+    ">
+      <div style="
+        display: inline-block;
+        background: #fff3cd;
+        color: #8a5a00;
+        font-weight: bold;
+        font-size: 13px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        margin-bottom: 14px;
+      ">
+        Wichtiger Hinweis
+      </div>
+
+      <h2 style="margin: 0 0 12px 0; font-size: 22px; color: #5a3e00;">
+        Hinweis zur Nutzung
+      </h2>
+
+      <p style="font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 12px;">
+        Die Musterlösungen dienen nur als Vorschläge. Es sind auch andere fachlich korrekte Antworten möglich.
+      </p>
+
+      <p style="font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 18px;">
+        Das Bewertungssystem bietet lediglich eine Orientierung und stellt keine verbindliche Bewertung im Sinne einer IHK-Prüfung dar.
+      </p>
+
+      <label id="hinweisCheckboxWrap" style="
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 18px;
+        cursor: pointer;
+      ">
+        <input type="checkbox" id="hinweisCheckbox" style="
+          margin-top: 2px;
+          transform: scale(1.15);
+          accent-color: #f0b429;
+        ">
+        <span>Ich habe den Hinweis gelesen.</span>
+      </label>
+
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button id="hinweisButton" onclick="hinweisSchliessen()" disabled style="
+          flex: 1;
+          min-width: 180px;
+          padding: 12px 18px;
+          border: none;
+          border-radius: 12px;
+          background: #d9d9d9;
+          color: #666;
+          font-size: 15px;
+          font-weight: bold;
+          cursor: not-allowed;
+        ">
+          Gelesen und fortfahren
+        </button>
+
+        <button onclick="hinweisNurSchliessen()" style="
+          flex: 1;
+          min-width: 140px;
+          padding: 12px 18px;
+          border: 1px solid #d6c28a;
+          border-radius: 12px;
+          background: #fff8e6;
+          color: #7a5a00;
+          font-size: 15px;
+          font-weight: bold;
+          cursor: pointer;
+        ">
+          Schließen
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div style="
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    font-size: 12px;
+    color: rgba(0,0,0,0.65);
+    background: rgba(255,255,255,0.75);
+    padding: 4px 8px;
+    border-radius: 8px;
+    z-index: 9997;
+    font-family: Arial, sans-serif;
+  ">
+    © Sabine Becker
+  </div>
+
+  <script>
+  const API_BASE_URL = "https://script.google.com/macros/s/AKfycbxTymUhl29rdmXONuWRlVkoe8xiFXqVf2bWUju1XgC44l2qoUT3LTU_PownQrNHbBKUVA/exec";
+
+  const faecherNachTeilbereich = {
+    WQ: [
+      "Recht",
+      "Steuern",
+      "Rechnungswesen",
+      "BWL",
+      "VWL",
+      "Unternehmensführung"
+    ],
+    HQ: [
+      "Führung und Zusammenarbeit",
+      "Betriebliches Management",
+      "Logistik",
+      "Marketing",
+      "Vertrieb",
+      "Finance Controlling"
+    ]
+  };
+
+  let aktuellerTeilbereich = "";
+  let aktuellesFach = "";
+  let aktuelleFrage = "";
+  let aktuellesThema = "";
+  let aktuelleMusterloesung = "";
+  let aktuelleFrageId = "";
+  let ladeToken = 0;
+  let appIstBeschaeftigt = false;
+
+  let aktuellerNutzer = localStorage.getItem("nutzerCode");
+
+  if (!aktuellerNutzer) {
+    aktuellerNutzer = prompt("Bitte gib deinen Nutzer-Code ein:");
+    if (!aktuellerNutzer || !aktuellerNutzer.trim()) {
+      aktuellerNutzer = "Gast";
+    }
+    aktuellerNutzer = aktuellerNutzer.trim();
+    localStorage.setItem("nutzerCode", aktuellerNutzer);
+  }
+
+  const sessionStats = {
+    totalErreicht: 0,
+    totalMax: 0,
+    faecher: {},
+    eintraege: []
+  };
+
+  let glossarDaten = [];
+
+  window.addEventListener("load", function () {
+    updateStatAnzeige();
+    initialisiereHinweis();
+  });
+
+  function zeigeBereich(viewId) {
+    document.querySelectorAll(".view").forEach(function(view) {
+      view.classList.remove("active");
+    });
+
+    const ziel = document.getElementById(viewId);
+    if (ziel) {
+      ziel.classList.add("active");
+    }
+
+    document.querySelectorAll(".nav-btn").forEach(function(btn) {
+      btn.classList.remove("active");
+    });
+
+    if (viewId === "startView") document.getElementById("navStart").classList.add("active");
+    if (viewId === "trainerView") document.getElementById("navTrainer").classList.add("active");
+    if (viewId === "lernstandView") document.getElementById("navLernstand").classList.add("active");
+    if (viewId === "glossarView") document.getElementById("navGlossar").classList.add("active");
+    if (viewId === "wissenView") document.getElementById("navWissen").classList.add("active");
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function oeffneTrainerMitTeilbereich(teilbereich) {
+    zeigeBereich("trainerView");
+    const select = document.getElementById("teilbereichSelect");
+    select.value = teilbereich;
+    waehleTeilbereich();
+  }
+
+  async function ladeGlossar() {
+    if (appIstBeschaeftigt) return;
+
+    try {
+      setzeAppBeschaeftigt(true);
+
+      const status = document.getElementById("glossarStatus");
+      const liste = document.getElementById("glossarListe");
+
+      status.textContent = "Glossar wird geladen...";
+      liste.className = "result-list-empty";
+      liste.innerHTML = "Bitte kurz warten...";
+
+      const result = await apiGet("getGlossar");
+
+      if (!result.success) {
+        throw new Error(result.error || "Glossar konnte nicht geladen werden.");
+      }
+
+      glossarDaten = result.data || [];
+
+      if (!glossarDaten.length) {
+        status.textContent = "Keine Glossar-Einträge gefunden.";
+        liste.className = "result-list-empty";
+        liste.innerHTML = "Im Sheet „Glossar“ wurden keine Einträge gefunden.";
+        return;
+      }
+
+      status.textContent = glossarDaten.length + " Begriffe geladen.";
+      renderGlossar(glossarDaten);
+
+    } catch (error) {
+      document.getElementById("glossarStatus").textContent =
+        "Fehler beim Laden: " + error.message;
+    } finally {
+      setzeAppBeschaeftigt(false);
+    }
+  }
+
+  function filtereGlossar() {
+    const suchbegriff = String(document.getElementById("glossarSuche").value || "").trim().toLowerCase();
+
+    if (!glossarDaten.length) {
+      document.getElementById("glossarListe").className = "result-list-empty";
+      document.getElementById("glossarListe").innerHTML = "Bitte zuerst das Glossar laden.";
+      return;
+    }
+
+    if (!suchbegriff) {
+      renderGlossar(glossarDaten);
+      return;
+    }
+
+    const treffer = glossarDaten.filter(function(eintrag) {
+      const suchText = [
+        eintrag.begriff,
+        eintrag.erklaerung,
+        eintrag.fach,
+        eintrag.thema,
+        eintrag.synonyme
+      ].join(" ").toLowerCase();
+
+      return suchText.includes(suchbegriff);
+    });
+
+    document.getElementById("glossarStatus").textContent =
+      treffer.length + " Treffer für „" + suchbegriff + "“.";
+
+    renderGlossar(treffer);
+  }
+
+  function renderGlossar(daten) {
+    const liste = document.getElementById("glossarListe");
+
+    if (!daten.length) {
+      liste.className = "result-list-empty";
+      liste.innerHTML = "Keine passenden Begriffe gefunden.";
+      return;
+    }
+
+    liste.className = "";
+    liste.innerHTML = daten.map(function(eintrag) {
+      return `
+        <div class="result-mini-entry">
+          <div class="result-mini-head">
+            <div class="result-mini-title">${escapeHtml(eintrag.begriff)}</div>
+            <div class="result-mini-score">${escapeHtml(eintrag.fach)}</div>
+          </div>
+
+          <div style="font-size:14px; line-height:1.5; color:#4a3970; margin-top:8px;">
+            ${escapeHtml(eintrag.erklaerung)}
+          </div>
+
+          <div class="result-mini-footer">
+            <span><strong>Thema:</strong> ${escapeHtml(eintrag.thema)}</span>
+          </div>
+
+          <div style="margin-top:8px; font-size:13px; color:#5a4a80;">
+            <strong>Synonyme:</strong> ${escapeHtml(eintrag.synonyme || "keine")}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function setzeAppBeschaeftigt(status) {
+    appIstBeschaeftigt = status;
+
+    document.querySelectorAll("button, select, textarea, input").forEach(function(el) {
+      if (el.id === "hinweisCheckbox") return;
+      if (el.id === "hinweisButton") return;
+      if (el.closest("#hinweisOverlay")) return;
+
+      el.disabled = status;
+      el.style.opacity = status ? "0.65" : "1";
+      el.style.cursor = status ? "wait" : "";
+    });
+  }
+
+  function waehleTeilbereich() {
+    if (appIstBeschaeftigt) return;
+
+    ladeToken++;
+    aktuellerTeilbereich = document.getElementById("teilbereichSelect").value;
+    aktuellesFach = "";
+    aktuellesThema = "";
+    aktuelleFrage = "";
+    aktuelleMusterloesung = "";
+    aktuelleFrageId = "";
+
+    const fachSelect = document.getElementById("fachSelect");
+    const fachBereich = document.getElementById("fachBereich");
+    const themaSelect = document.getElementById("themaSelect");
+    const themaBereich = document.getElementById("themaBereich");
+
+    fachSelect.innerHTML = '<option value="">-- Fach wählen --</option>';
+    themaSelect.innerHTML = '<option value="">-- Thema wählen --</option>';
+    themaBereich.style.display = "none";
+
+    if (!aktuellerTeilbereich) {
+      fachBereich.style.display = "none";
+      document.getElementById("fachStatus").textContent = "Bitte zuerst einen Teilbereich auswählen.";
+      document.getElementById("anzeigeTeilbereich").textContent = "Kein Teilbereich";
+      document.getElementById("anzeigeFach").textContent = "Kein Fach";
+      document.getElementById("anzeigeThema").textContent = "Bitte Thema wählen";
+      document.getElementById("frageText").textContent = "Bitte zuerst Teilbereich, Fach und Thema auswählen.";
+      resetFrageAnzeige();
+      updateStatAnzeige();
+      return;
+    }
+
+    const faecher = faecherNachTeilbereich[aktuellerTeilbereich] || [];
+
+    faecher.forEach(function(fach) {
+      const option = document.createElement("option");
+      option.value = fach;
+      option.textContent = fach;
+      fachSelect.appendChild(option);
+    });
+
+    fachBereich.style.display = "block";
+
+    document.getElementById("anzeigeTeilbereich").textContent = aktuellerTeilbereich;
+    document.getElementById("anzeigeFach").textContent = "Bitte Fach wählen";
+    document.getElementById("anzeigeThema").textContent = "Bitte Thema wählen";
+    document.getElementById("frageText").textContent = "Bitte zuerst ein Fach und dann ein Thema auswählen.";
+    document.getElementById("fachStatus").textContent = "Teilbereich gewählt: " + aktuellerTeilbereich;
+
+    resetFrageAnzeige();
+    updateStatAnzeige();
+  }
+
+  function waehleFachAusDropdown() {
+    if (appIstBeschaeftigt) return;
+
+    const fach = document.getElementById("fachSelect").value;
+
+    if (!fach) {
+      ladeToken++;
+      aktuellesFach = "";
+      aktuellesThema = "";
+      aktuelleFrage = "";
+      aktuelleMusterloesung = "";
+      aktuelleFrageId = "";
+
+      document.getElementById("themaBereich").style.display = "none";
+      document.getElementById("themaSelect").innerHTML = '<option value="">-- Thema wählen --</option>';
+      document.getElementById("anzeigeFach").textContent = "Kein Fach";
+      document.getElementById("anzeigeThema").textContent = "Bitte Thema wählen";
+      document.getElementById("frageText").textContent = "Bitte zuerst ein Fach auswählen.";
+      document.getElementById("fachStatus").textContent = "Bitte ein Fach auswählen.";
+
+      resetFrageAnzeige();
+      updateStatAnzeige();
+      return;
+    }
+
+    waehleFach(fach);
+  }
+
+  function ermittleTeilbereich(fach) {
+    if (faecherNachTeilbereich.WQ.includes(fach)) return "WQ";
+    if (faecherNachTeilbereich.HQ.includes(fach)) return "HQ";
+    return aktuellerTeilbereich || "";
+  }
+
+  function setzeStatus(text) {
+    document.getElementById("ladeStatus").textContent = text || "";
+  }
+
+  function resetFrageAnzeige() {
+    document.getElementById("antwortInput").value = "";
+    document.getElementById("resultBox").style.display = "none";
+    document.getElementById("solutionBox").style.display = "none";
+    document.getElementById("musterloesungText").textContent = "";
+    document.getElementById("ergebnisText").textContent = "Hier erscheint die Bewertung.";
+    document.getElementById("punkteAnzeige").textContent = "0 / 0 Punkte";
+    document.getElementById("punkteAnzeige").classList.remove("good", "bad");
+    setzeStatus("");
+  }
+
+  async function apiGet(action, params = {}) {
+    const url = new URL(API_BASE_URL);
+    url.searchParams.set("action", action);
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        url.searchParams.set(key, value);
+      }
+    });
+
+    const response = await fetch(url.toString(), { method: "GET" });
+
+    if (!response.ok) {
+      throw new Error("HTTP-Fehler: " + response.status);
+    }
+
+    return await response.json();
+  }
+
+  async function apiPost(action, payload = {}) {
+    const response = await fetch(API_BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify({
+        action,
+        ...payload
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error("HTTP-Fehler: " + response.status);
+    }
+
+    return await response.json();
+  }
+
+  async function ladeThemen(fach) {
+    const eigenerToken = ++ladeToken;
+
+    try {
+      setzeAppBeschaeftigt(true);
+
+      const select = document.getElementById("themaSelect");
+      const bereich = document.getElementById("themaBereich");
+
+      select.innerHTML = '<option value="">Themen werden geladen...</option>';
+      bereich.style.display = "block";
+      document.getElementById("fachStatus").textContent = "Themen werden geladen für: " + fach;
+
+      const result = await apiGet("topics", { fach });
+
+      if (eigenerToken !== ladeToken) return;
+
+      if (!result.success) {
+        throw new Error(result.error || "Themen konnten nicht geladen werden.");
+      }
+
+      const themen = result.data || [];
+
+      select.innerHTML = '<option value="">-- Thema wählen --</option>';
+
+      if (!themen.length) {
+        select.innerHTML = '<option value="">Keine Themen gefunden</option>';
+        document.getElementById("fachStatus").textContent =
+          "Keine Themen gefunden für: " + fach + ". Prüfe, ob im Sheet aktive Fragen mit Aktiv = ja vorhanden sind.";
+        return;
+      }
+
+      themen.forEach(function(thema) {
+        const option = document.createElement("option");
+        option.value = thema;
+        option.textContent = thema;
+        select.appendChild(option);
+      });
+
+      document.getElementById("fachStatus").textContent =
+        "Themen geladen für: " + fach + " (" + themen.length + ")";
+    } catch (error) {
+      if (eigenerToken !== ladeToken) return;
+
+      document.getElementById("themaSelect").innerHTML =
+        '<option value="">Fehler beim Laden</option>';
+
+      document.getElementById("fachStatus").textContent =
+        "Fehler beim Laden der Themen: " + error.message;
+    } finally {
+      if (eigenerToken === ladeToken) {
+        setzeAppBeschaeftigt(false);
+      }
+    }
+  }
+
+  function waehleFach(fach) {
+    aktuellesFach = String(fach || "").trim();
+    aktuellesThema = "";
+    aktuelleFrage = "";
+    aktuelleMusterloesung = "";
+    aktuelleFrageId = "";
+
+    document.getElementById("anzeigeFach").textContent = aktuellesFach || "Kein Fach";
+    document.getElementById("anzeigeThema").textContent = "Bitte Thema wählen";
+    document.getElementById("frageText").textContent = "Bitte zuerst ein Thema auswählen.";
+    document.getElementById("fachStatus").textContent = "Ausgewähltes Fach: " + aktuellesFach;
+
+    document.getElementById("themaSelect").innerHTML =
+      '<option value="">Themen werden geladen...</option>';
+
+    resetFrageAnzeige();
+    updateStatAnzeige();
+
+    if (aktuellesFach) {
+      ladeThemen(aktuellesFach);
+    }
+  }
+
+  async function ladeFrageAusFach(fach, thema) {
+    const eigenerToken = ++ladeToken;
+
+    try {
+      setzeAppBeschaeftigt(true);
+      setzeStatus("Frage wird geladen...");
+
+      const result = await apiGet("nextQuestion", { fach, thema });
+
+      if (eigenerToken !== ladeToken) return;
+
+      if (!result.success) {
+        throw new Error(result.error || "Frage konnte nicht geladen werden.");
+      }
+
+      const daten = result.data || {};
+
+      if (!daten.id) {
+        aktuelleFrage = "";
+        aktuelleMusterloesung = "";
+        aktuelleFrageId = "";
+
+        document.getElementById("frageText").textContent =
+          daten.frage || "Keine aktive Frage gefunden.";
+        document.getElementById("anzeigeThema").textContent = thema || "Thema nicht hinterlegt";
+
+        resetFrageAnzeige();
+        setzeStatus("Keine aktive Frage gefunden.");
+        return;
+      }
+
+      aktuelleFrage = daten.frage || "";
+      aktuellesThema = daten.thema || thema || "Thema nicht hinterlegt";
+      aktuelleMusterloesung = daten.musterloesung || "";
+      aktuelleFrageId = daten.id || "";
+
+      document.getElementById("frageText").textContent = aktuelleFrage;
+      document.getElementById("anzeigeThema").textContent = aktuellesThema;
+
+      resetFrageAnzeige();
+      setzeStatus("Frage geladen.");
+    } catch (error) {
+      if (eigenerToken !== ladeToken) return;
+
+      aktuelleFrage = "";
+      aktuelleMusterloesung = "";
+      aktuelleFrageId = "";
+
+      document.getElementById("frageText").textContent = "Fehler beim Laden der Frage.";
+      setzeStatus("Fehler: " + error.message);
+    } finally {
+      if (eigenerToken === ladeToken) {
+        setzeAppBeschaeftigt(false);
+      }
+    }
+  }
+
+  function starteThema() {
+    if (appIstBeschaeftigt) return;
+
+    const thema = document.getElementById("themaSelect").value;
+
+    if (!aktuellerTeilbereich) {
+      alert("Bitte zuerst einen Teilbereich auswählen.");
+      return;
+    }
+
+    if (!aktuellesFach) {
+      alert("Bitte zuerst ein Fach auswählen.");
+      return;
+    }
+
+    if (!thema) {
+      alert("Bitte zuerst ein Thema auswählen.");
+      return;
+    }
+
+    aktuellesThema = thema;
+    ladeFrageAusFach(aktuellesFach, aktuellesThema);
+  }
+
+  async function bewerteAntwort() {
+    if (appIstBeschaeftigt) return;
+
+    const antwort = document.getElementById("antwortInput").value.trim();
+
+    if (!aktuellerTeilbereich) {
+      alert("Bitte zuerst einen Teilbereich auswählen.");
+      return;
+    }
+
+    if (!aktuellesFach) {
+      alert("Bitte zuerst ein Fach auswählen.");
+      return;
+    }
+
+    if (!aktuellesThema) {
+      alert("Bitte zuerst ein Thema auswählen.");
+      return;
+    }
+
+    if (!aktuelleFrageId) {
+      alert("Es ist aktuell keine Frage geladen.");
+      return;
+    }
+
+    if (!antwort) {
+      alert("Bitte zuerst eine Antwort eingeben.");
+      return;
+    }
+
+    try {
+      setzeAppBeschaeftigt(true);
+      setzeStatus("Antwort wird ausgewertet...");
+
+      const result = await apiPost("bewerteAntwort", {
+        fach: aktuellesFach,
+        frageId: aktuelleFrageId,
+        antwort: antwort
+      });
+
+      if (!result.success) {
+        throw new Error(result.error || "Auswertung fehlgeschlagen.");
+      }
+
+      const data = result.data || {};
+
+      document.getElementById("resultBox").style.display = "block";
+
+      const punkte = Number(data.punkte || 0);
+      const maxPunkte = Number(data.maxPunkte || 0);
+      const bewertungText = data.ergebnis || "Keine Auswertung erhalten.";
+
+      const punkteAnzeige = document.getElementById("punkteAnzeige");
+      punkteAnzeige.textContent = punkte + " / " + maxPunkte + " Punkte";
+      punkteAnzeige.classList.remove("good", "bad");
+      punkteAnzeige.classList.add(maxPunkte > 0 && punkte >= maxPunkte / 2 ? "good" : "bad");
+
+      document.getElementById("ergebnisText").textContent = bewertungText;
+
+      aktuelleMusterloesung = data.musterloesung || "";
+      document.getElementById("solutionBox").style.display = "none";
+      document.getElementById("musterloesungText").textContent = "";
+
+      verbucheSessionErgebnis(
+        aktuellesFach,
+        aktuelleFrageId,
+        punkte,
+        maxPunkte
+      );
+
+      updateStatAnzeige();
+
+      setzeStatus("Auswertung abgeschlossen. Lernstand wird gespeichert...");
+
+      const speicherResult = await apiPost("speichereLernstand", {
+        nutzer: aktuellerNutzer,
+        teilbereich: ermittleTeilbereich(aktuellesFach),
+        fach: aktuellesFach,
+        thema: aktuellesThema,
+        frageId: aktuelleFrageId,
+        punkte: punkte,
+        maxPunkte: maxPunkte,
+        bewertung: bewertungText,
+        antwort: antwort
+      });
+
+      if (!speicherResult.success) {
+        throw new Error(speicherResult.error || "Lernstand konnte nicht gespeichert werden.");
+      }
+
+      setzeStatus("Auswertung abgeschlossen und Lernstand gespeichert.");
+    } catch (error) {
+      setzeStatus("Fehler bei der Auswertung oder Speicherung: " + error.message);
+    } finally {
+      setzeAppBeschaeftigt(false);
+    }
+  }
+
+  function verbucheSessionErgebnis(fach, frageId, punkte, maxPunkte) {
+    if (!fach || !frageId) return;
+
+    if (!sessionStats.faecher[fach]) {
+      sessionStats.faecher[fach] = { erreicht: 0, max: 0 };
+    }
+
+    const index = sessionStats.eintraege.findIndex(function(e) {
+      return e.fach === fach && e.frageId === frageId;
+    });
+
+    if (index !== -1) {
+      const alt = sessionStats.eintraege[index];
+
+      sessionStats.faecher[fach].erreicht -= alt.punkte;
+      sessionStats.faecher[fach].max -= alt.maxPunkte;
+
+      sessionStats.totalErreicht -= alt.punkte;
+      sessionStats.totalMax -= alt.maxPunkte;
+
+      sessionStats.eintraege.splice(index, 1);
+    }
+
+    const neuerEintrag = {
+      teilbereich: ermittleTeilbereich(fach),
+      fach: fach,
+      frageId: frageId,
+      punkte: punkte,
+      maxPunkte: maxPunkte,
+      prozent: berechneProzent(punkte, maxPunkte)
+    };
+
+    sessionStats.eintraege.unshift(neuerEintrag);
+
+    sessionStats.faecher[fach].erreicht += punkte;
+    sessionStats.faecher[fach].max += maxPunkte;
+
+    sessionStats.totalErreicht += punkte;
+    sessionStats.totalMax += maxPunkte;
+  }
+
+  function berechneProzent(erreicht, max) {
+    if (!max || max <= 0) return 0;
+    return Math.round((erreicht / max) * 100);
+  }
+
+  function updateStatAnzeige() {
+    const fachStats = aktuellesFach && sessionStats.faecher[aktuellesFach]
+      ? sessionStats.faecher[aktuellesFach]
+      : { erreicht: 0, max: 0 };
+
+    const fachProzent = berechneProzent(fachStats.erreicht, fachStats.max);
+    const sessionProzent = berechneProzent(sessionStats.totalErreicht, sessionStats.totalMax);
+
+    document.getElementById("fachProzent").textContent = fachProzent + "%";
+    document.getElementById("fachDetails").textContent =
+      fachStats.erreicht + " von " + fachStats.max + " Punkten im aktuellen Fach";
+    document.getElementById("fachProgressBar").style.width = fachProzent + "%";
+
+    document.getElementById("sessionProzent").textContent = sessionProzent + "%";
+    document.getElementById("sessionDetails").textContent =
+      sessionStats.totalErreicht + " von " + sessionStats.totalMax + " Punkten in dieser Session";
+    document.getElementById("sessionProgressBar").style.width = sessionProzent + "%";
+
+    renderEinzelergebnisse();
+  }
+
+  function renderEinzelergebnisse() {
+    const container = document.getElementById("einzelergebnisListe");
+
+    if (!sessionStats.eintraege.length) {
+      container.className = "result-list-empty";
+      container.innerHTML = "Noch keine Ergebnisse in dieser Session.";
+      return;
+    }
+
+    container.className = "";
+    container.innerHTML = sessionStats.eintraege.map(function(eintrag) {
+      return `
+        <div class="result-mini-entry">
+          <div class="result-mini-head">
+            <div class="result-mini-title">${escapeHtml(eintrag.teilbereich)} · ${escapeHtml(eintrag.fach)}</div>
+            <div class="result-mini-score">${eintrag.prozent}%</div>
+          </div>
+
+          <div class="result-mini-bar">
+            <div class="result-mini-fill" style="width: ${eintrag.prozent}%;"></div>
+          </div>
+
+          <div class="result-mini-footer">
+            <span>${eintrag.punkte} / ${eintrag.maxPunkte} Punkte</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function escapeHtml(text) {
+    return String(text || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function resetSession() {
+    if (appIstBeschaeftigt) return;
+
+    const bestaetigt = confirm("Möchtest du die komplette Lernsession wirklich zurücksetzen?");
+    if (!bestaetigt) return;
+
+    sessionStats.totalErreicht = 0;
+    sessionStats.totalMax = 0;
+    sessionStats.faecher = {};
+    sessionStats.eintraege = [];
+
+    updateStatAnzeige();
+    setzeStatus("Lernsession wurde zurückgesetzt.");
+  }
+
+  function zeigeMusterloesung() {
+    if (!aktuelleMusterloesung) {
+      alert("Zur aktuellen Frage ist keine Musterlösung vorhanden.");
+      return;
+    }
+
+    document.getElementById("resultBox").style.display = "block";
+    document.getElementById("solutionBox").style.display = "block";
+    document.getElementById("musterloesungText").textContent = aktuelleMusterloesung;
+  }
+
+  function naechsteFrage() {
+    if (appIstBeschaeftigt) return;
+
+    if (!aktuellerTeilbereich) {
+      alert("Bitte zuerst einen Teilbereich auswählen.");
+      return;
+    }
+
+    if (!aktuellesFach) {
+      alert("Bitte zuerst ein Fach auswählen.");
+      return;
+    }
+
+    if (!aktuellesThema) {
+      alert("Bitte zuerst ein Thema auswählen.");
+      return;
+    }
+
+    ladeFrageAusFach(aktuellesFach, aktuellesThema);
+  }
+
+  function antwortLeeren() {
+    if (appIstBeschaeftigt) return;
+    document.getElementById("antwortInput").value = "";
+  }
+
+  function initialisiereHinweis() {
+    const checkbox = document.getElementById("hinweisCheckbox");
+    const button = document.getElementById("hinweisButton");
+
+    if (!localStorage.getItem("hinweisGelesen")) {
+      document.getElementById("hinweisOverlay").style.display = "flex";
+    }
+
+    checkbox.addEventListener("change", function () {
+      if (checkbox.checked) {
+        button.disabled = false;
+        button.style.background = "linear-gradient(135deg, #f0b429, #d97706)";
+        button.style.color = "#ffffff";
+        button.style.cursor = "pointer";
+      } else {
+        button.disabled = true;
+        button.style.background = "#d9d9d9";
+        button.style.color = "#666";
+        button.style.cursor = "not-allowed";
+      }
+    });
+  }
+
+  function hinweisAnzeigen() {
+    document.getElementById("hinweisOverlay").style.display = "flex";
+
+    const checkboxWrap = document.getElementById("hinweisCheckboxWrap");
+    const checkbox = document.getElementById("hinweisCheckbox");
+    const button = document.getElementById("hinweisButton");
+
+    checkboxWrap.style.display = "flex";
+    checkbox.checked = false;
+    button.disabled = true;
+    button.style.background = "#d9d9d9";
+    button.style.color = "#666";
+    button.style.cursor = "not-allowed";
+    button.textContent = "Gelesen und fortfahren";
+  }
+
+  function hinweisSchliessen() {
+    const bereitsGelesen = localStorage.getItem("hinweisGelesen") === "true";
+    const checkbox = document.getElementById("hinweisCheckbox");
+
+    if (!bereitsGelesen && !checkbox.checked) {
+      return;
+    }
+
+    document.getElementById("hinweisOverlay").style.display = "none";
+    localStorage.setItem("hinweisGelesen", "true");
+  }
+
+  function hinweisNurSchliessen() {
+    document.getElementById("hinweisOverlay").style.display = "none";
+  }
+async function ladeLernstand() {
+  if (appIstBeschaeftigt) return;
+
+  try {
+    setzeAppBeschaeftigt(true);
+
+    const status = document.getElementById("lernstandStatus");
+    const liste = document.getElementById("lernstandListe");
+
+    status.textContent = "Lernstand wird geladen...";
+    liste.className = "result-list-empty";
+    liste.innerHTML = "Bitte kurz warten...";
+
+    const result = await apiGet("getLernstand", {
+      nutzer: aktuellerNutzer
+    });
+
+    if (!result.success) {
+      throw new Error(result.error || "Lernstand konnte nicht geladen werden.");
+    }
+
+    const daten = result.data || [];
+
+    if (!daten.length) {
+      status.textContent = "Keine gespeicherten Einträge gefunden.";
+      liste.className = "result-list-empty";
+      liste.innerHTML = "Für diesen Nutzer-Code wurde noch kein Lernstand gefunden.";
+      return;
+    }
+
+    status.textContent = daten.length + " gespeicherte Auswertungen geladen.";
+    liste.className = "";
+
+    const fachMap = {};
+
+    daten.forEach(function(eintrag) {
+      const key = String(eintrag.teilbereich || "") + "||" + String(eintrag.fach || "");
+
+      if (!fachMap[key]) {
+        fachMap[key] = {
+          teilbereich: eintrag.teilbereich || "",
+          fach: eintrag.fach || "",
+          erreicht: 0,
+          max: 0,
+          anzahl: 0,
+          eintraege: []
+        };
+      }
+
+      fachMap[key].erreicht += Number(eintrag.punkte || 0);
+      fachMap[key].max += Number(eintrag.maxPunkte || 0);
+      fachMap[key].anzahl += 1;
+      fachMap[key].eintraege.push(eintrag);
+    });
+
+    const fachBloecke = Object.values(fachMap);
+
+    liste.innerHTML = fachBloecke.map(function(fachBlock, index) {
+      const prozent = fachBlock.max > 0
+        ? Math.round((fachBlock.erreicht / fachBlock.max) * 100)
+        : 0;
+
+      return `
+        <div class="result-mini-entry">
+          <div class="result-mini-head">
+            <div class="result-mini-title">
+              ${escapeHtml(fachBlock.teilbereich)} · ${escapeHtml(fachBlock.fach)}
+            </div>
+            <div class="result-mini-score">
+              ${prozent}%
+            </div>
+          </div>
+
+          <div class="result-mini-bar">
+            <div class="result-mini-fill" style="width: ${prozent}%;"></div>
+          </div>
+
+          <div class="result-mini-footer">
+            <span>${fachBlock.erreicht} / ${fachBlock.max} Punkte · ${fachBlock.anzahl} Auswertungen</span>
+            <button class="secondary-btn" style="padding:6px 10px; font-size:12px; width:auto;" onclick="toggleDetails(${index})">
+              Details
+            </button>
+          </div>
+
+          <div id="details-${index}" style="display:none; margin-top:10px;">
+            ${fachBlock.eintraege.map(function(eintrag) {
+              const einzelProzent = Number(eintrag.maxPunkte || 0) > 0
+                ? Math.round((Number(eintrag.punkte || 0) / Number(eintrag.maxPunkte || 0)) * 100)
+                : Number(eintrag.prozent || 0);
+
+              return `
+                <div style="margin-top:10px; font-size:13px; color:#5a4a80; border-top:1px solid #eadfff; padding-top:8px; line-height:1.5;">
+                  <strong>${einzelProzent}%</strong> · ${escapeHtml(eintrag.punkte)} / ${escapeHtml(eintrag.maxPunkte)} Punkte · ${escapeHtml(eintrag.datum)}<br>
+                  <strong>Thema:</strong> ${escapeHtml(eintrag.thema)}<br>
+                  <strong>Frage:</strong> ${escapeHtml(eintrag.frage || eintrag.frageId || "Frage nicht gefunden")}
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
+    }).join("");
+
+  } catch (error) {
+    document.getElementById("lernstandStatus").textContent =
+      "Fehler beim Laden: " + error.message;
+  } finally {
+    setzeAppBeschaeftigt(false);
+  }
+}
+
+function toggleDetails(index) {
+  const el = document.getElementById("details-" + index);
+  if (!el) return;
+  el.style.display = el.style.display === "none" ? "block" : "none";
+}
+</script>
+</body>
+</html>
+
