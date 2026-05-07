@@ -1007,36 +1007,39 @@
     <div class="home-grid">
 
       <div class="home-tile">
-        <h3>🗂️ Karteikartenmodus</h3>
+  <h3>🗂️ Karteikartenmodus</h3>
 
-        <p>
-          Themenbezogene Lernkarten zum Wiederholen wichtiger Fachbegriffe,
-          Definitionen und Zusammenhänge.
-        </p>
+  <p>
+    Themenbezogene Lernkarten aus deinen bestehenden Fragen und Musterlösungen.
+  </p>
 
-        <label class="label">Teilbereich</label>
-        <select>
-          <option>WQ – Wirtschaftsbezogene Qualifikationen</option>
-          <option>HQ – Handlungsspezifische Qualifikationen</option>
-        </select>
+  <label class="label" for="kartenTeilbereichSelect">Teilbereich</label>
+  <select id="kartenTeilbereichSelect" onchange="kartenTeilbereichWaehlen()">
+    <option value="">-- Teilbereich wählen --</option>
+    <option value="WQ">WQ – Wirtschaftsbezogene Qualifikationen</option>
+    <option value="HQ">HQ – Handlungsspezifische Qualifikationen</option>
+  </select>
 
-        <label class="label" style="margin-top:12px;">Fach</label>
-        <select>
-          <option>Fach auswählen</option>
-        </select>
+  <label class="label" for="kartenFachSelect" style="margin-top:12px;">Fach</label>
+  <select id="kartenFachSelect" onchange="kartenFachWaehlen()">
+    <option value="">-- Fach wählen --</option>
+  </select>
 
-        <label class="label" style="margin-top:12px;">Thema</label>
-        <select>
-          <option>Thema auswählen</option>
-        </select>
+  <label class="label" for="kartenThemaSelect" style="margin-top:12px;">Thema</label>
+  <select id="kartenThemaSelect">
+    <option value="">Alle Themen</option>
+  </select>
 
-        <div class="button-row" style="margin-top:14px;">
-          <button class="action-btn">
-            Karteikarten starten
-          </button>
-        </div>
-      </div>
+  <div class="button-row" style="margin-top:14px;">
+    <button class="action-btn" onclick="ladeKarteikarten()">
+      Karteikarten laden
+    </button>
+  </div>
 
+  <div class="status" id="kartenStatus">
+    Bitte Teilbereich und Fach auswählen.
+  </div>
+</div>
       <div class="home-tile">
         <h3>🎧 Audiofunktion</h3>
 
@@ -1070,7 +1073,36 @@
 
     </div>
   </div>
+</div>
+</div>
 
+<div class="card" id="karteikartenBox" style="display:none;">
+  <h2 class="section-title">Karteikarten lernen</h2>
+
+  <div class="question-meta">
+    <span class="badge" id="kartenZaehler">0 von 0</span>
+    <span class="badge" id="kartenFachAnzeige">Kein Fach</span>
+    <span class="badge" id="kartenThemaAnzeige">Kein Thema</span>
+  </div>
+
+  <div class="question-box" id="kartenVorderseite">
+    Hier erscheint die Vorderseite der Karte.
+  </div>
+
+  <div class="solution-box" id="kartenRueckseite" style="display:none;">
+    <strong>Rückseite:</strong>
+    <div id="kartenRueckseiteText"></div>
+  </div>
+
+  <div class="button-row">
+    <button class="secondary-btn" onclick="vorherigeKarte()">Vorherige Karte</button>
+    <button class="action-btn" onclick="karteUmdrehen()">Karte umdrehen</button>
+    <button class="secondary-btn" onclick="naechsteKarteAnzeigen()">Nächste Karte</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2 class="section-title">Geplante Erweiterungen</h2>
   <div class="card">
     <h2 class="section-title">Geplante Erweiterungen</h2>
 
@@ -1322,6 +1354,8 @@
 
   let glossarDaten = [];
 let glossarAktiverBuchstabe = "";
+ let karteikartenDaten = [];
+let aktuelleKartenIndex = 0; 
     
   window.addEventListener("load", function () {
     updateStatAnzeige();
@@ -2286,6 +2320,176 @@ function renderGlossar(daten) {
     if (!el) return;
     el.style.display = el.style.display === "none" ? "block" : "none";
   }
+    function kartenTeilbereichWaehlen() {
+  const teilbereich = document.getElementById("kartenTeilbereichSelect").value;
+  const fachSelect = document.getElementById("kartenFachSelect");
+  const themaSelect = document.getElementById("kartenThemaSelect");
+
+  fachSelect.innerHTML = '<option value="">-- Fach wählen --</option>';
+  themaSelect.innerHTML = '<option value="">Alle Themen</option>';
+
+  karteikartenDaten = [];
+  aktuelleKartenIndex = 0;
+
+  document.getElementById("karteikartenBox").style.display = "none";
+  document.getElementById("kartenStatus").textContent = "Bitte Fach auswählen.";
+
+  if (!teilbereich) {
+    document.getElementById("kartenStatus").textContent = "Bitte Teilbereich und Fach auswählen.";
+    return;
+  }
+
+  const faecher = faecherNachTeilbereich[teilbereich] || [];
+
+  faecher.forEach(function(fach) {
+    const option = document.createElement("option");
+    option.value = fach;
+    option.textContent = fach;
+    fachSelect.appendChild(option);
+  });
+}
+
+async function kartenFachWaehlen() {
+  const fach = document.getElementById("kartenFachSelect").value;
+  const themaSelect = document.getElementById("kartenThemaSelect");
+
+  themaSelect.innerHTML = '<option value="">Alle Themen</option>';
+
+  karteikartenDaten = [];
+  aktuelleKartenIndex = 0;
+
+  document.getElementById("karteikartenBox").style.display = "none";
+
+  if (!fach) {
+    document.getElementById("kartenStatus").textContent = "Bitte Fach auswählen.";
+    return;
+  }
+
+  try {
+    document.getElementById("kartenStatus").textContent = "Themen werden geladen...";
+
+    const result = await apiGet("topics", { fach });
+
+    if (!result.success) {
+      throw new Error(result.error || "Themen konnten nicht geladen werden.");
+    }
+
+    const themen = result.data || [];
+
+    themen.forEach(function(thema) {
+      const option = document.createElement("option");
+      option.value = thema;
+      option.textContent = thema;
+      themaSelect.appendChild(option);
+    });
+
+    document.getElementById("kartenStatus").textContent =
+      "Fach gewählt. Du kannst jetzt ein Thema auswählen oder alle Themen laden.";
+
+  } catch (error) {
+    document.getElementById("kartenStatus").textContent =
+      "Fehler beim Laden der Themen: " + error.message;
+  }
+}
+
+async function ladeKarteikarten() {
+  const fach = document.getElementById("kartenFachSelect").value;
+  const thema = document.getElementById("kartenThemaSelect").value;
+
+  if (!fach) {
+    alert("Bitte zuerst ein Fach auswählen.");
+    return;
+  }
+
+  try {
+    document.getElementById("kartenStatus").textContent = "Karteikarten werden geladen...";
+
+    const result = await apiGet("getKarteikarten", {
+      fach: fach,
+      thema: thema
+    });
+
+    if (!result.success) {
+      throw new Error(result.error || "Karteikarten konnten nicht geladen werden.");
+    }
+
+    karteikartenDaten = result.data || [];
+    aktuelleKartenIndex = 0;
+
+    if (!karteikartenDaten.length) {
+      document.getElementById("karteikartenBox").style.display = "none";
+      document.getElementById("kartenStatus").textContent =
+        "Keine Karteikarten gefunden. Prüfe, ob aktive Fragen mit Musterlösung vorhanden sind.";
+      return;
+    }
+
+    document.getElementById("karteikartenBox").style.display = "block";
+    document.getElementById("kartenStatus").textContent =
+      karteikartenDaten.length + " Karteikarten geladen.";
+
+    zeigeAktuelleKarte();
+
+  } catch (error) {
+    document.getElementById("kartenStatus").textContent =
+      "Fehler beim Laden der Karteikarten: " + error.message;
+  }
+}
+
+function zeigeAktuelleKarte() {
+  if (!karteikartenDaten.length) return;
+
+  const karte = karteikartenDaten[aktuelleKartenIndex];
+
+  document.getElementById("kartenZaehler").textContent =
+    (aktuelleKartenIndex + 1) + " von " + karteikartenDaten.length;
+
+  document.getElementById("kartenFachAnzeige").textContent =
+    karte.fach || "Kein Fach";
+
+  document.getElementById("kartenThemaAnzeige").textContent =
+    karte.thema || "Kein Thema";
+
+  document.getElementById("kartenVorderseite").textContent =
+    karte.vorderseite || "Keine Vorderseite vorhanden.";
+
+  document.getElementById("kartenRueckseiteText").textContent =
+    karte.rueckseite || "Keine Rückseite vorhanden.";
+
+  document.getElementById("kartenRueckseite").style.display = "none";
+}
+
+function karteUmdrehen() {
+  const rueckseite = document.getElementById("kartenRueckseite");
+
+  if (!karteikartenDaten.length) return;
+
+  rueckseite.style.display =
+    rueckseite.style.display === "none" ? "block" : "none";
+}
+
+function naechsteKarteAnzeigen() {
+  if (!karteikartenDaten.length) return;
+
+  aktuelleKartenIndex++;
+
+  if (aktuelleKartenIndex >= karteikartenDaten.length) {
+    aktuelleKartenIndex = 0;
+  }
+
+  zeigeAktuelleKarte();
+}
+
+function vorherigeKarte() {
+  if (!karteikartenDaten.length) return;
+
+  aktuelleKartenIndex--;
+
+  if (aktuelleKartenIndex < 0) {
+    aktuelleKartenIndex = karteikartenDaten.length - 1;
+  }
+
+  zeigeAktuelleKarte();
+}
   </script>
 </body>
 </html>
