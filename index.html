@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -570,43 +569,72 @@
 
           <button class="nav-btn" id="navLernstand" onclick="zeigeBereich('lernstandView')">Lernstand</button>
           <button class="nav-btn" id="navGlossar" onclick="zeigeBereich('glossarView')">Glossar</button>
-          <button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
-          <button class="nav-btn" onclick="hinweisAnzeigen()">Nutzungshinweis</button>
+<button class="nav-btn" id="navFormeln" onclick="zeigeBereich('formelView')">Formelsammlung</button>
+<button class="nav-btn" id="navPruefung" onclick="zeigeBereich('pruefungView')">Prüfungssimulation</button>
+<button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
+<button class="nav-btn" onclick="hinweisAnzeigen()">Nutzungshinweis</button>
         </div>
       </nav>
 
       <section class="view active" id="startView">
-        <div class="header">
-          <h1>WiFa Trainer</h1>
-          <p>Dein Lernbereich für Wirtschaftsfachwirt-Themen: Fragen üben, Antworten auswerten lassen und Lernstand sichtbar machen.</p>
-        </div>
+  <div class="header">
+    <h1>WiFa Trainer</h1>
+    <p>
+      Dein Lernsystem für den Wirtschaftsfachwirt (IHK): offene Fragen üben,
+      Antworten auswerten lassen und gezielt an den eigenen Lücken arbeiten.
+    </p>
+    <p style="margin-top:10px;">
+      Entwickelt für den Wirtschaftsfachwirt (IHK) – gleichzeitig geeignet zur Wiederholung
+      kaufmännischer Grundlagen in vielen weiteren Aus- und Weiterbildungen.
+    </p>
 
-        <div class="home-grid">
-          <div class="home-tile">
-            <h3>WIFA Trainer</h3>
-            <p>Starte den Fragenmodus nach Teilbereich, Fach und Thema.</p>
-            <button class="action-btn" onclick="zeigeBereich('trainerView')">Trainer öffnen</button>
-          </div>
+    <div class="button-row" style="margin-top:18px;">
+      <button class="action-btn" onclick="oeffneTrainerMitTeilbereich('WQ')">WQ starten</button>
+      <button class="action-btn" onclick="oeffneTrainerMitTeilbereich('HQ')">HQ starten</button>
+    </div>
+  </div>
 
-          <div class="home-tile">
-            <h3>Lernstand</h3>
-            <p>Hier entsteht die Übersicht über gespeicherte Ergebnisse und Fortschritt.</p>
-            <button class="secondary-btn" onclick="zeigeBereich('lernstandView')">Lernstand ansehen</button>
-          </div>
+  <div class="card">
+    <h2 class="section-title">Was ist der WiFa Trainer?</h2>
+    <p style="line-height:1.6; color:#4a3970; margin:0;">
+      Der WiFa Trainer ist ein Lernbereich für offene Prüfungsfragen. Du beantwortest Fragen
+      in eigenen Worten, bekommst eine KI-gestützte Auswertung und kannst anschließend
+      Musterlösung, Punkte und fehlende Inhalte vergleichen.
+    </p>
+  </div>
 
-          <div class="home-tile">
-            <h3>Glossar</h3>
-            <p>Fachbegriffe, Synonyme und kurze Erklärungen werden hier später gesammelt.</p>
-            <button class="secondary-btn" onclick="zeigeBereich('glossarView')">Glossar öffnen</button>
-          </div>
+  <div class="home-grid">
+    <div class="home-tile">
+      <h3>🧠 KI-Auswertung</h3>
+      <p>Deine Freitextantwort wird anhand fachlicher Stichpunkte bewertet.</p>
+    </div>
 
-          <div class="home-tile">
-            <h3>Wissensdatenbank</h3>
-            <p>Zusammenfassungen, Merksätze, Beispiele und spätere Karteikarten bekommen hier ihren Platz.</p>
-            <button class="secondary-btn" onclick="zeigeBereich('wissenView')">Wissen öffnen</button>
-          </div>
-        </div>
-      </section>
+    <div class="home-tile">
+      <h3>📊 Lernstand</h3>
+      <p>Ergebnisse werden gespeichert und später nach Fach und Thema sichtbar.</p>
+    </div>
+
+    <div class="home-tile">
+      <h3>📚 Glossar</h3>
+      <p>Wichtige Fachbegriffe, Synonyme und kurze Erklärungen zum Nachschlagen.</p>
+    </div>
+
+    <div class="home-tile">
+      <h3>📐 Formelsammlung</h3>
+      <p>IHK-Formeln, Abkürzungen und Seitenangaben bekommen hier ihren Platz.</p>
+    </div>
+
+    <div class="home-tile">
+      <h3>🎯 Prüfungssimulation</h3>
+      <p>Später für realistische Übung unter Zeitdruck mit gemischten Aufgaben.</p>
+    </div>
+
+    <div class="home-tile">
+      <h3>💬 Frag Kilian</h3>
+      <p>Geplant als direkter KI-Helfer, wenn beim Lernen etwas unklar ist.</p>
+    </div>
+  </div>
+</section>
 
       <section class="view" id="trainerView">
         <div class="header">
@@ -761,6 +789,33 @@
           </div>
         </div>
       </section>
+<section class="view" id="formelView">
+  <div class="header">
+    <h1>Formelsammlung</h1>
+    <p>IHK-Formeln, Abkürzungen und Hinweise zur Anwendung.</p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Formelsammlung</h2>
+    <div class="placeholder-box">
+      Hier entsteht die Formelsammlung mit IHK-Stand, Seitenangaben, Formelzeichen und kurzen Erklärungen.
+    </div>
+  </div>
+</section>
+
+<section class="view" id="pruefungView">
+  <div class="header">
+    <h1>Prüfungssimulation</h1>
+    <p>Realistische Übung unter Zeitdruck – später mit gemischten Aufgaben und Punkteauswertung.</p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Prüfungssimulation</h2>
+    <div class="placeholder-box">
+      Dieser Bereich ist vorbereitet. Die Prüfungssimulation wird später ergänzt.
+    </div>
+  </div>
+</section>
 
       <section class="view" id="wissenView">
         <div class="header">
@@ -987,7 +1042,9 @@
     if (viewId === "trainerView") document.getElementById("navTrainer").classList.add("active");
     if (viewId === "lernstandView") document.getElementById("navLernstand").classList.add("active");
     if (viewId === "glossarView") document.getElementById("navGlossar").classList.add("active");
-    if (viewId === "wissenView") document.getElementById("navWissen").classList.add("active");
+if (viewId === "formelView") document.getElementById("navFormeln").classList.add("active");
+if (viewId === "pruefungView") document.getElementById("navPruefung").classList.add("active");
+if (viewId === "wissenView") document.getElementById("navWissen").classList.add("active");
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -1847,4 +1904,3 @@ function toggleDetails(index) {
 </script>
 </body>
 </html>
-
