@@ -1004,7 +1004,7 @@
   <div class="card">
     <h2 class="section-title">Karteikarten</h2>
 
-    <div class="home-grid">
+    <div>
 
       <div class="home-tile">
   <h3>🗂️ Karteikartenmodus</h3>
@@ -1040,39 +1040,27 @@
     Bitte Teilbereich und Fach auswählen.
   </div>
 </div>
-      <div class="home-tile">
-        <h3>🎧 Audiofunktion</h3>
+      <div class="home-tile" style="margin-top:14px;">
+  <h3>🎧 Audiofunktion</h3>
 
-        <p>
-          Lerninhalte später als Audio anhören – zum Wiederholen,
-          unterwegs oder nebenbei.
-        </p>
+  <p>
+    Lies dir die aktuell geladene Karteikarte automatisch vor.
+    Erst wird die Frage gelesen, danach die Musterlösung.
+  </p>
 
-        <label class="label">Teilbereich</label>
-        <select>
-          <option>WQ – Wirtschaftsbezogene Qualifikationen</option>
-          <option>HQ – Handlungsspezifische Qualifikationen</option>
-        </select>
+  <div class="button-row" style="margin-top:14px;">
+    <button class="secondary-btn" onclick="audioAktuelleKarte()">
+      Aktuelle Karte vorlesen
+    </button>
 
-        <label class="label" style="margin-top:12px;">Fach</label>
-        <select>
-          <option>Fach auswählen</option>
-        </select>
-
-        <label class="label" style="margin-top:12px;">Thema</label>
-        <select>
-          <option>Thema auswählen</option>
-        </select>
-
-        <div class="button-row" style="margin-top:14px;">
-          <button class="secondary-btn">
-            Audio starten
-          </button>
-        </div>
-      </div>
-
-    </div>
+    <button class="secondary-btn" onclick="audioStoppen()">
+      Audio stoppen
+    </button>
   </div>
+
+  <div class="status" id="audioStatus">
+    Lade zuerst Karteikarten und wähle eine Karte aus.
+ 
 </div>
 </div>
 
@@ -2489,6 +2477,60 @@ function vorherigeKarte() {
   }
 
   zeigeAktuelleKarte();
+}
+    function audioAktuelleKarte() {
+  if (!karteikartenDaten.length) {
+    document.getElementById("audioStatus").textContent =
+      "Bitte zuerst Karteikarten laden.";
+    return;
+  }
+
+  if (!("speechSynthesis" in window)) {
+    document.getElementById("audioStatus").textContent =
+      "Dein Browser unterstützt die Vorlesefunktion leider nicht.";
+    return;
+  }
+
+  const karte = karteikartenDaten[aktuelleKartenIndex];
+
+  const text =
+    "Frage. " +
+    String(karte.vorderseite || "") +
+    ". Musterlösung. " +
+    String(karte.rueckseite || "");
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "de-DE";
+  utterance.rate = 0.95;
+  utterance.pitch = 1;
+
+  utterance.onstart = function() {
+    document.getElementById("audioStatus").textContent =
+      "Audio läuft: Karte " + (aktuelleKartenIndex + 1) + " von " + karteikartenDaten.length;
+  };
+
+  utterance.onend = function() {
+    document.getElementById("audioStatus").textContent =
+      "Audio beendet.";
+  };
+
+  utterance.onerror = function() {
+    document.getElementById("audioStatus").textContent =
+      "Audio konnte nicht abgespielt werden.";
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function audioStoppen() {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+
+  document.getElementById("audioStatus").textContent =
+    "Audio gestoppt.";
 }
   </script>
 </body>
