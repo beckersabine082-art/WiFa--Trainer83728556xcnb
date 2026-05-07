@@ -1134,18 +1134,46 @@
 </section>
 
       <section class="view" id="kilianView">
-        <div class="header">
-          <h1>Frag Kilian</h1>
-          <p>Direkter KI-Helfer für Verständnisfragen, Erklärungen und Unterstützung beim Lernen.</p>
-        </div>
+  <div class="header">
+    <h1>Frag Kilian</h1>
 
-        <div class="card">
-          <h2 class="section-title">Frag Kilian</h2>
-          <div class="placeholder-box">
-            Hier wird später der KI-Chat eingebunden. Bis dahin bleibt dieser Bereich als vorbereiteter Platzhalter bestehen.
-          </div>
-        </div>
-      </section>
+    <p>
+      Direkter KI-Helfer für Verständnisfragen,
+      Erklärungen und Unterstützung beim Lernen.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Deine Frage</h2>
+
+    <textarea
+      id="kilianInput"
+      placeholder="Stelle hier deine Frage..."
+    ></textarea>
+
+    <div class="button-row">
+      <button class="action-btn" onclick="frageKilian()">
+        Frage senden
+      </button>
+
+      <button class="secondary-btn" onclick="kilianLeeren()">
+        Eingabe leeren
+      </button>
+    </div>
+
+    <div class="status" id="kilianStatus">
+      Kilian wartet auf deine Frage.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Antwort</h2>
+
+    <div class="question-box" id="kilianAntwort">
+      Hier erscheint die Antwort von Kilian.
+    </div>
+  </div>
+</section>
 
       <section class="view" id="impressumView">
         <div class="header">
@@ -2531,6 +2559,50 @@ function audioStoppen() {
 
   document.getElementById("audioStatus").textContent =
     "Audio gestoppt.";
+}
+    async function frageKilian() {
+  const frage = document.getElementById("kilianInput").value.trim();
+
+  if (!frage) {
+    alert("Bitte zuerst eine Frage eingeben.");
+    return;
+  }
+
+  try {
+    document.getElementById("kilianStatus").textContent =
+      "Kilian denkt nach...";
+
+    document.getElementById("kilianAntwort").textContent =
+      "Antwort wird geladen...";
+
+    const result = await apiPost("frageKilian", {
+      frage: frage
+    });
+
+    if (!result.success) {
+      throw new Error(result.error || "Fehler bei der Anfrage.");
+    }
+
+    document.getElementById("kilianAntwort").textContent =
+      result.data?.antwort || "Keine Antwort erhalten.";
+
+    document.getElementById("kilianStatus").textContent =
+      "Antwort erhalten.";
+
+  } catch (error) {
+    document.getElementById("kilianStatus").textContent =
+      "Fehler: " + error.message;
+  }
+}
+
+function kilianLeeren() {
+  document.getElementById("kilianInput").value = "";
+
+  document.getElementById("kilianAntwort").textContent =
+    "Hier erscheint die Antwort von Kilian.";
+
+  document.getElementById("kilianStatus").textContent =
+    "Kilian wartet auf deine Frage.";
 }
   </script>
 </body>
