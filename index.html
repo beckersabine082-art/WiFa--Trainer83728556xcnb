@@ -1240,7 +1240,13 @@ let glossarAktiverBuchstabe = "";
     if (viewId === "startView") document.getElementById("navStart").classList.add("active");
     if (viewId === "trainerView") document.getElementById("navTrainer").classList.add("active");
     if (viewId === "lernstandView") document.getElementById("navLernstand").classList.add("active");
-    if (viewId === "glossarView") document.getElementById("navGlossar").classList.add("active");
+    if (viewId === "glossarView") {
+  document.getElementById("navGlossar").classList.add("active");
+
+  if (!glossarDaten.length && !appIstBeschaeftigt) {
+    ladeGlossar();
+  }
+}
     if (viewId === "formelView") document.getElementById("navFormeln").classList.add("active");
     if (viewId === "pruefungView") document.getElementById("navPruefung").classList.add("active");
     if (viewId === "wissenView") document.getElementById("navWissen").classList.add("active");
