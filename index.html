@@ -622,6 +622,11 @@
   background: #b794f6;
   color: #ffffff;
 }
+    .kilian-textarea {
+  min-height: 80px;
+  max-height: 260px;
+  overflow-y: auto;
+}
     @media (min-width: 700px) {
       .app {
         padding: 24px;
@@ -1146,10 +1151,12 @@
   <div class="card">
     <h2 class="section-title">Deine Frage</h2>
 
-    <textarea
-      id="kilianInput"
-      placeholder="Stelle hier deine Frage..."
-    ></textarea>
+   <textarea
+  id="kilianInput"
+  class="kilian-textarea"
+  placeholder="Stelle hier deine Frage..."
+  oninput="this.style.height='auto'; this.style.height=this.scrollHeight + 'px';"
+></textarea>
 
     <div class="button-row">
       <button class="action-btn" onclick="frageKilian()">
