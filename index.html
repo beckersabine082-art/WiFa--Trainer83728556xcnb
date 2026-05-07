@@ -2587,8 +2587,8 @@ function audioStoppen() {
     document.getElementById("kilianStatus").textContent =
       "Kilian denkt nach...";
 
-   document.getElementById("kilianAntwort").innerHTML =
-  formatKilianAntwort(result.data.antwort || "Keine Antwort erhalten.");
+    document.getElementById("kilianAntwort").textContent =
+      "Antwort wird geladen...";
 
     const result = await apiPost("frageKilian", {
       frage: frage
@@ -2598,8 +2598,8 @@ function audioStoppen() {
       throw new Error(result.error || "Fehler bei der Anfrage.");
     }
 
-    document.getElementById("kilianAntwort").textContent =
-      result.data?.antwort || "Keine Antwort erhalten.";
+    document.getElementById("kilianAntwort").innerHTML =
+      formatKilianAntwort(result.data?.antwort || "Keine Antwort erhalten.");
 
     document.getElementById("kilianStatus").textContent =
       "Antwort erhalten.";
