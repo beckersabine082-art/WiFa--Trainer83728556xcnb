@@ -967,19 +967,50 @@
         </div>
       </section>
 
-      <section class="view" id="formelView">
-        <div class="header">
-          <h1>Formelsammlung</h1>
-          <p>Formeln, Abkürzungen und Hinweise zur Anwendung.</p>
-        </div>
+     <section class="view" id="formelView">
+  <div class="header">
+    <h1>Formelsammlung</h1>
+    <p>Formeln, Abkürzungen, Beispiele und kurze Erklärungen zum schnellen Nachschlagen.</p>
+  </div>
 
-        <div class="card">
-          <h2 class="section-title">Formelsammlung</h2>
-          <div class="placeholder-box">
-            Hier entsteht die Formelsammlung mit Stand, Seitenangaben, Formelzeichen und kurzen Erklärungen.
-          </div>
-        </div>
-      </section>
+  <div class="card">
+    <h2 class="section-title">Formeln suchen</h2>
+
+    <input
+      type="text"
+      id="formelSuche"
+      placeholder="Begriff, Formel, Thema oder Abkürzung suchen..."
+      oninput="filtereFormeln()"
+    >
+
+    <div style="margin-top:12px;">
+      <label class="label" for="formelThemaFilter">Nach Thema filtern</label>
+      <select id="formelThemaFilter" onchange="filtereFormeln()">
+        <option value="">Alle Themen</option>
+      </select>
+    </div>
+
+    <div style="margin-top:12px;">
+      <label class="label" for="formelSchwierigkeitFilter">Nach Schwierigkeit filtern</label>
+      <select id="formelSchwierigkeitFilter" onchange="filtereFormeln()">
+        <option value="">Alle Schwierigkeiten</option>
+        <option value="leicht">leicht</option>
+        <option value="mittel">mittel</option>
+        <option value="schwer">schwer</option>
+      </select>
+    </div>
+
+    <div class="button-row" style="margin-top:14px;">
+      <button class="secondary-btn" onclick="resetFormelFilter()">Filter zurücksetzen</button>
+    </div>
+
+    <div class="status" id="formelStatus">Formelsammlung wird beim Öffnen automatisch geladen.</div>
+  </div>
+
+  <div id="formelListe" class="result-list-empty">
+    Öffne die Formelsammlung oder nutze die Suche.
+  </div>
+</section>
 
       <section class="view" id="pruefungView">
         <div class="header">
@@ -1453,6 +1484,7 @@
   };
 
   let glossarDaten = [];
+    let formelDaten = [];
 let glossarAktiverBuchstabe = "";
  let karteikartenDaten = [];
 let aktuelleKartenIndex = 0; 
@@ -1486,7 +1518,13 @@ let aktuelleKartenIndex = 0;
     ladeGlossar();
   }
 }
-    if (viewId === "formelView") document.getElementById("navFormeln").classList.add("active");
+if (viewId === "formelView") {
+  document.getElementById("navFormeln").classList.add("active");
+
+  if (!formelDaten.length && !appIstBeschaeftigt) {
+    ladeFormelsammlung();
+  }
+}
     if (viewId === "pruefungView") document.getElementById("navPruefung").classList.add("active");
     if (viewId === "wissenView") document.getElementById("navWissen").classList.add("active");
     if (viewId === "kilianView") document.getElementById("navKilian").classList.add("active");
@@ -2692,6 +2730,157 @@ function kilianLeeren() {
 
   document.getElementById("kilianStatus").textContent =
     "Kilian wartet auf deine Frage.";
+}
+    async function ladeFormelsammlung() {
+  if (appIstBeschaeftigt) return;
+
+  try {
+    setzeAppBeschaeftigt(true);
+
+    const status = document.getElementById("formelStatus");
+    const liste = document.getElementById("formelListe");
+
+    status.textContent = "Formelsammlung wird geladen...";
+    liste.className = "result-list-empty";
+    liste.innerHTML = "Bitte kurz warten...";
+
+    const result = await apiGet("getFormelsammlung");
+
+    if (!result.success) {
+      throw new Error(result.error || "Formelsammlung konnte nicht geladen werden.");
+    }
+
+    formelDaten = result.data || [];
+
+    if (!formelDaten.length) {
+      status.textContent = "Keine aktiven Formeln gefunden.";
+      liste.className = "result-list-empty";
+      liste.innerHTML = "Im Sheet „Formelsammlung“ wurden keine aktiven Formeln gefunden.";
+      return;
+    }
+
+    baueFormelFilter();
+    resetFormelFilter();
+
+  } catch (error) {
+    document.getElementById("formelStatus").textContent =
+      "Fehler beim Laden: " + error.message;
+  } finally {
+    setzeAppBeschaeftigt(false);
+  }
+}
+
+function baueFormelFilter() {
+  const themaSelect = document.getElementById("formelThemaFilter");
+
+  const themen = [...new Set(formelDaten.map(function(eintrag) {
+    return String(eintrag.thema || "").trim();
+  }).filter(Boolean))].sort();
+
+  themaSelect.innerHTML = '<option value="">Alle Themen</option>';
+
+  themen.forEach(function(thema) {
+    const option = document.createElement("option");
+    option.value = thema;
+    option.textContent = thema;
+    themaSelect.appendChild(option);
+  });
+}
+
+function resetFormelFilter() {
+  document.getElementById("formelSuche").value = "";
+  document.getElementById("formelThemaFilter").value = "";
+  document.getElementById("formelSchwierigkeitFilter").value = "";
+
+  document.getElementById("formelStatus").textContent =
+    formelDaten.length + " Formeln geladen.";
+
+  renderFormeln(formelDaten);
+}
+
+function filtereFormeln() {
+  const suche = String(document.getElementById("formelSuche").value || "").trim().toLowerCase();
+  const themaFilter = String(document.getElementById("formelThemaFilter").value || "").trim().toLowerCase();
+  const schwierigkeitsFilter = String(document.getElementById("formelSchwierigkeitFilter").value || "").trim().toLowerCase();
+
+  if (!formelDaten.length) {
+    document.getElementById("formelListe").className = "result-list-empty";
+    document.getElementById("formelListe").innerHTML = "Formelsammlung wird noch geladen.";
+    return;
+  }
+
+  const treffer = formelDaten.filter(function(eintrag) {
+    const suchText = [
+      eintrag.thema,
+      eintrag.begriff,
+      eintrag.formel,
+      eintrag.erklaerung,
+      eintrag.beispiel,
+      eintrag.schwierigkeit,
+      eintrag.ihk2025,
+      eintrag.abkuerzungen
+    ].join(" ").toLowerCase();
+
+    const thema = String(eintrag.thema || "").trim().toLowerCase();
+    const schwierigkeit = String(eintrag.schwierigkeit || "").trim().toLowerCase();
+
+    const passtZurSuche = !suche || suchText.includes(suche);
+    const passtZumThema = !themaFilter || thema === themaFilter;
+    const passtZurSchwierigkeit = !schwierigkeitsFilter || schwierigkeit === schwierigkeitsFilter;
+
+    return passtZurSuche && passtZumThema && passtZurSchwierigkeit;
+  });
+
+  document.getElementById("formelStatus").textContent =
+    treffer.length + " passende Formeln gefunden.";
+
+  renderFormeln(treffer);
+}
+
+function renderFormeln(daten) {
+  const liste = document.getElementById("formelListe");
+
+  if (!daten.length) {
+    liste.className = "result-list-empty";
+    liste.innerHTML = "Keine passenden Formeln gefunden.";
+    return;
+  }
+
+  liste.className = "";
+  liste.innerHTML = daten.map(function(eintrag) {
+    return `
+      <div class="result-mini-entry">
+        <div class="result-mini-head">
+          <div class="result-mini-title">${escapeHtml(eintrag.begriff)}</div>
+          <div class="result-mini-score">${escapeHtml(eintrag.schwierigkeit || "")}</div>
+        </div>
+
+        <div style="font-size:16px; line-height:1.6; color:#2d1f46; margin-top:8px;">
+          <strong>Formel:</strong><br>
+          ${escapeHtml(eintrag.formel)}
+        </div>
+
+        <div style="font-size:14px; line-height:1.6; color:#4a3970; margin-top:10px;">
+          <strong>Erklärung:</strong><br>
+          ${escapeHtml(eintrag.erklaerung)}
+        </div>
+
+        <div style="font-size:14px; line-height:1.6; color:#4a3970; margin-top:10px;">
+          <strong>Beispiel:</strong><br>
+          ${escapeHtml(eintrag.beispiel || "kein Beispiel hinterlegt")}
+        </div>
+
+        <div class="result-mini-footer">
+          <span><strong>Thema:</strong> ${escapeHtml(eintrag.thema)}</span>
+          <span><strong>IHK 2025:</strong> ${escapeHtml(eintrag.ihk2025 || "offen")}</span>
+        </div>
+
+        <div style="margin-top:8px; font-size:13px; color:#5a4a80;">
+          <strong>Abkürzungen:</strong> ${escapeHtml(eintrag.abkuerzungen || "keine hinterlegt")}
+        </div>
+      </div>
+    `;
+  }).join("");
 }
   </script>
 </body>
