@@ -2120,6 +2120,14 @@ function renderGlossar(daten) {
       .replace(/'/g, "&#039;");
   }
 
+    function formatKilianAntwort(text) {
+  return String(text || "")
+    .replace(/### (.*?)(\n|$)/g, "<h3>$1</h3>")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\n- /g, "<br>• ")
+    .replace(/\n/g, "<br>");
+}
+    
   function resetSession() {
     if (appIstBeschaeftigt) return;
 
@@ -2579,8 +2587,8 @@ function audioStoppen() {
     document.getElementById("kilianStatus").textContent =
       "Kilian denkt nach...";
 
-    document.getElementById("kilianAntwort").textContent =
-      "Antwort wird geladen...";
+   document.getElementById("kilianAntwort").innerHTML =
+  formatKilianAntwort(result.data.antwort || "Keine Antwort erhalten.");
 
     const result = await apiPost("frageKilian", {
       frage: frage
