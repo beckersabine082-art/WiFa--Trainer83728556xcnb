@@ -508,7 +508,119 @@
       line-height: 1.6;
       color: #5a4a80;
     }
+.hero-card {
+  background: linear-gradient(135deg, #efe7ff, #f9f6ff);
+  border-radius: 24px;
+  padding: 28px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px rgba(80, 45, 140, 0.12);
+  display: grid;
+  gap: 20px;
+}
 
+.hero-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #e4d6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 58px;
+}
+
+.hero-text h1 {
+  margin: 0 0 16px 0;
+  font-size: 34px;
+}
+
+.hero-text p {
+  line-height: 1.7;
+  color: #3d2d63;
+  font-size: 16px;
+}
+
+.notice-box {
+  border: 1px solid #cdb7ff;
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255,255,255,0.65);
+}
+
+.notice-box p {
+  margin: 8px 0 0 0;
+  line-height: 1.6;
+  color: #3d2d63;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.feature-card {
+  background: #ffffff;
+  border: 1px solid #eadfff;
+  border-radius: 20px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(80, 45, 140, 0.08);
+}
+
+.feature-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #eadfff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.feature-card h3 {
+  margin: 0 0 10px 0;
+}
+
+.feature-card p {
+  margin: 0;
+  line-height: 1.5;
+  color: #5a4a80;
+}
+
+.footer-links {
+  text-align: center;
+  font-size: 13px;
+  color: #5a4a80;
+  margin: 20px 0 10px 0;
+}
+
+.footer-links button {
+  border: none;
+  background: transparent;
+  color: #5a35b1;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+@media (min-width: 800px) {
+  .hero-card {
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+  }
+
+  .notice-box {
+    grid-column: 1 / -1;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
     @media (min-width: 700px) {
       .app {
         padding: 24px;
@@ -577,125 +689,126 @@
       </nav>
 
       <section class="view active" id="startView">
-  <div class="header">
-  <h1>WiFa Trainer</h1>
+ <div class="hero-card">
 
-  <p style="font-size:18px; line-height:1.7; margin-top:18px;">
-    Willkommen beim WiFa Trainer – einem digitalen Lernbereich zur Vorbereitung
-    auf kaufmännische Prüfungen und Weiterbildungen.
-  </p>
+  <div class="hero-icon">🎓</div>
 
-  <p style="margin-top:18px; line-height:1.7;">
-    Die Plattform entstand ursprünglich zur Unterstützung bei der Vorbereitung
-    auf die Prüfung zum Wirtschaftsfachwirt und richtet sich besonders an Lernende,
-    die offene Fragen trainieren, Wissen strukturieren und ihren Lernstand
-    nachvollziehen möchten.
-  </p>
+  <div class="hero-text">
+    <h1>WiFa Trainer</h1>
 
-  <p style="margin-top:18px; line-height:1.7;">
-    Gleichzeitig eignet sich der WiFa Trainer auch zur Wiederholung kaufmännischer
-    Grundlagen in vielen weiteren Aus- und Weiterbildungen.
-  </p>
+    <p>
+      Willkommen beim WiFa Trainer – einem digitalen Lernbereich zur Vorbereitung
+      auf kaufmännische Prüfungen und Weiterbildungen.
+    </p>
 
-  <div style="
-    margin-top:24px;
-    padding:18px;
-    border-radius:16px;
-    background:#f7f2ff;
-    border:1px solid #dfd1ff;
-  ">
-    <strong style="display:block; margin-bottom:10px;">
-      Wichtiger Hinweis
-    </strong>
+    <p>
+      Die Plattform entstand ursprünglich zur Unterstützung bei der Vorbereitung
+      auf die Prüfung zum Wirtschaftsfachwirt und richtet sich besonders an Lernende,
+      die offene Fragen trainieren, Wissen strukturieren und ihren Lernstand
+      nachvollziehen möchten.
+    </p>
 
-    <div style="line-height:1.7; color:#4a3970;">
+    <p>
+      Gleichzeitig eignet sich der WiFa Trainer auch zur Wiederholung kaufmännischer
+      Grundlagen in vielen weiteren Aus- und Weiterbildungen.
+    </p>
+  </div>
+
+  <div class="notice-box">
+    <strong>Wichtiger Hinweis</strong>
+
+    <p>
       Der WiFa Trainer ist ein unabhängiges Lernprojekt und steht in keiner
       Verbindung zur IHK. Die Inhalte dienen ausschließlich der privaten
       Prüfungsvorbereitung und Orientierung.
-    </div>
+    </p>
   </div>
 
- <div class="card">
+</div>
+
+<div class="card">
   <h2 class="section-title">Die Funktionen im Überblick</h2>
 
-  <div class="home-grid">
+  <div class="feature-grid">
 
-    <div class="home-tile">
-      <h3>🧠 WIFA Trainer</h3>
+    <div class="feature-card">
+      <div class="feature-icon">🎓</div>
+      <h3>WIFA Trainer</h3>
       <p>
-        Offene Fragen beantworten, Antworten auswerten lassen und gezielt
-        Wissenslücken erkennen.
+        Offene Fragen beantworten, Antworten auswerten lassen und gezielt Wissenslücken erkennen.
       </p>
     </div>
 
-    <div class="home-tile">
-      <h3>📊 Lernstand</h3>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Lernstand</h3>
       <p>
         Fortschritte nach Fach und Thema nachvollziehen und Ergebnisse speichern.
       </p>
     </div>
 
-    <div class="home-tile">
-      <h3>📚 Glossar</h3>
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3>Glossar</h3>
       <p>
         Fachbegriffe, Synonyme und kurze Erklärungen schnell nachschlagen.
       </p>
     </div>
 
-    <div class="home-tile">
-      <h3>📐 Formelsammlung</h3>
+    <div class="feature-card">
+      <div class="feature-icon">📐</div>
+      <h3>Formelsammlung</h3>
       <p>
-        Wichtige Formeln, Abkürzungen und spätere IHK-Seitenangaben gesammelt an einem Ort.
+        Wichtige Formeln, Abkürzungen und spätere Seitenangaben gesammelt an einem Ort.
       </p>
     </div>
 
-    <div class="home-tile">
-      <h3>🎯 Prüfungssimulation</h3>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Prüfungssimulation</h3>
       <p>
         Später realistische Prüfungssituationen mit Zeitdruck und Punkteauswertung trainieren.
       </p>
     </div>
 
-    <div class="home-tile">
-      <h3>💬 Frag Kilian</h3>
+    <div class="feature-card">
+      <div class="feature-icon">🗂️</div>
+      <h3>Wissensdatenbank</h3>
+      <p>
+        Zusammenfassungen, Merksätze und zusätzliche Lerninhalte.
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">ℹ️</div>
+      <h3>Nutzung</h3>
+      <p>
+        Hinweise zur Nutzung, Funktionen und Tipps zum Lernen.
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <h3>Frag Kilian</h3>
       <p>
         Direkter KI-Helfer für Verständnisfragen, Erklärungen und Unterstützung beim Lernen.
       </p>
     </div>
 
-  <div class="home-grid">
-    <div class="home-tile">
-      <h3>🧠 KI-Auswertung</h3>
-      <p>Deine Freitextantwort wird anhand fachlicher Stichpunkte bewertet.</p>
-    </div>
-
-    <div class="home-tile">
-      <h3>📊 Lernstand</h3>
-      <p>Ergebnisse werden gespeichert und später nach Fach und Thema sichtbar.</p>
-    </div>
-
-    <div class="home-tile">
-      <h3>📚 Glossar</h3>
-      <p>Wichtige Fachbegriffe, Synonyme und kurze Erklärungen zum Nachschlagen.</p>
-    </div>
-
-    <div class="home-tile">
-      <h3>📐 Formelsammlung</h3>
-      <p>IHK-Formeln, Abkürzungen und Seitenangaben bekommen hier ihren Platz.</p>
-    </div>
-
-    <div class="home-tile">
-      <h3>🎯 Prüfungssimulation</h3>
-      <p>Später für realistische Übung unter Zeitdruck mit gemischten Aufgaben.</p>
-    </div>
-
-    <div class="home-tile">
-      <h3>💬 Frag Kilian</h3>
-      <p>Geplant als direkter KI-Helfer, wenn beim Lernen etwas unklar ist.</p>
-    </div>
   </div>
-</section>
+</div>
 
+<div class="footer-links">
+  <span>© Sabine Becker 2026</span>
+
+  <button onclick="zeigeBereich('impressumView')">
+    Impressum
+  </button>
+
+  <button onclick="zeigeBereich('datenschutzView')">
+    Datenschutzerklärung
+  </button>
+</div>
       <section class="view" id="trainerView">
         <div class="header">
           <h1>WIFA Trainer</h1>
@@ -894,6 +1007,28 @@
     </div>
   </div>
 
+  <section class="view" id="impressumView">
+  <div class="header">
+    <h1>Impressum</h1>
+    <p>Angaben gemäß § 5 TMG.</p>
+  </div>
+
+  <div class="card">
+    <p>Hier werden deine Impressumsdaten ergänzt.</p>
+  </div>
+</section>
+
+<section class="view" id="datenschutzView">
+  <div class="header">
+    <h1>Datenschutzerklärung</h1>
+    <p>Informationen zum Umgang mit Daten.</p>
+  </div>
+
+  <div class="card">
+    <p>Hier wird die Datenschutzerklärung ergänzt.</p>
+  </div>
+</section>
+  
   <button id="hinweisInfoButton" onclick="hinweisAnzeigen()" style="
     position: fixed;
     left: 16px;
