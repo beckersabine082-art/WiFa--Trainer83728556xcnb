@@ -34,27 +34,28 @@
 
     .container {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1100px;
     }
 
     .top-nav {
       background: #ffffff;
-      border-radius: 18px;
-      padding: 10px;
-      margin-bottom: 14px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      border-radius: 22px;
+      padding: 14px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 28px rgba(80, 45, 140, 0.10);
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
       align-items: center;
       justify-content: space-between;
     }
 
     .brand {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 22px;
       color: #2d1f46;
       padding: 8px 10px;
+      width: 100%;
     }
 
     .nav-actions {
@@ -62,23 +63,26 @@
       flex-wrap: wrap;
       gap: 8px;
       width: 100%;
+      align-items: center;
     }
 
     .nav-btn {
       border: none;
-      border-radius: 999px;
-      padding: 10px 13px;
+      border-radius: 14px;
+      padding: 11px 14px;
       background: #efe7ff;
       color: #2d1f46;
       font-weight: bold;
       cursor: pointer;
       font-size: 14px;
       transition: 0.2s ease;
+      white-space: nowrap;
     }
 
     .nav-btn:hover,
     .nav-btn.active {
-      background: #cdb7ff;
+      background: #b794f6;
+      color: #ffffff;
     }
 
     .dropdown {
@@ -89,13 +93,13 @@
     .dropdown-content {
       display: none;
       position: absolute;
-      top: 44px;
+      top: 46px;
       left: 0;
-      min-width: 230px;
+      min-width: 270px;
       background: #ffffff;
-      border-radius: 14px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      padding: 8px;
+      border-radius: 18px;
+      box-shadow: 0 12px 34px rgba(0,0,0,0.15);
+      padding: 10px;
       z-index: 1000;
     }
 
@@ -109,11 +113,12 @@
       background: transparent;
       color: #2d1f46;
       text-align: left;
-      padding: 11px 12px;
-      border-radius: 10px;
+      padding: 13px 12px;
+      border-radius: 12px;
       font-weight: bold;
       cursor: pointer;
       font-size: 14px;
+      line-height: 1.35;
     }
 
     .dropdown-content button:hover {
@@ -156,35 +161,122 @@
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
 
-    .home-grid {
+    .section-title {
+      margin: 0 0 14px 0;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #efe7ff, #f9f6ff);
+      border-radius: 26px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 28px rgba(80, 45, 140, 0.12);
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero-icon {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: #e4d6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      margin: 0 auto;
+    }
+
+    .hero-text h1 {
+      margin: 0 0 16px 0;
+      font-size: 36px;
+      color: #221344;
+    }
+
+    .hero-text p {
+      line-height: 1.7;
+      color: #3d2d63;
+      font-size: 16px;
+      margin: 0 0 14px 0;
+    }
+
+    .notice-box {
+      border: 1px solid #cdb7ff;
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255,255,255,0.70);
+      display: grid;
+      gap: 6px;
+    }
+
+    .notice-box strong {
+      font-size: 16px;
+      color: #221344;
+    }
+
+    .notice-box p {
+      margin: 0;
+      line-height: 1.6;
+      color: #3d2d63;
+    }
+
+    .feature-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .home-tile {
-      background: #faf7ff;
+    .feature-card {
+      background: #ffffff;
       border: 1px solid #eadfff;
-      border-radius: 16px;
-      padding: 14px;
+      border-radius: 20px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(80, 45, 140, 0.08);
     }
 
-    .home-tile h3 {
-      margin: 0 0 8px 0;
+    .feature-icon {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: #eadfff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px auto;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 10px 0;
       font-size: 17px;
+      color: #221344;
     }
 
-    .home-tile p {
-      margin: 0 0 12px 0;
+    .feature-card p {
+      margin: 0;
       line-height: 1.5;
       color: #5a4a80;
       font-size: 14px;
     }
 
-    .section-title {
-      margin: 0 0 12px 0;
-      font-size: 18px;
+    .footer-links {
+      text-align: center;
+      font-size: 13px;
+      color: #5a4a80;
+      margin: 22px 0 10px 0;
+    }
+
+    .footer-links button {
+      border: none;
+      background: transparent;
+      color: #5a35b1;
       font-weight: bold;
+      cursor: pointer;
+      margin-left: 10px;
     }
 
     .label {
@@ -508,119 +600,7 @@
       line-height: 1.6;
       color: #5a4a80;
     }
-.hero-card {
-  background: linear-gradient(135deg, #efe7ff, #f9f6ff);
-  border-radius: 24px;
-  padding: 28px;
-  margin-bottom: 18px;
-  box-shadow: 0 8px 24px rgba(80, 45, 140, 0.12);
-  display: grid;
-  gap: 20px;
-}
 
-.hero-icon {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: #e4d6ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 58px;
-}
-
-.hero-text h1 {
-  margin: 0 0 16px 0;
-  font-size: 34px;
-}
-
-.hero-text p {
-  line-height: 1.7;
-  color: #3d2d63;
-  font-size: 16px;
-}
-
-.notice-box {
-  border: 1px solid #cdb7ff;
-  border-radius: 18px;
-  padding: 16px;
-  background: rgba(255,255,255,0.65);
-}
-
-.notice-box p {
-  margin: 8px 0 0 0;
-  line-height: 1.6;
-  color: #3d2d63;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-
-.feature-card {
-  background: #ffffff;
-  border: 1px solid #eadfff;
-  border-radius: 20px;
-  padding: 18px;
-  text-align: center;
-  box-shadow: 0 4px 14px rgba(80, 45, 140, 0.08);
-}
-
-.feature-icon {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: #eadfff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 12px auto;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.feature-card h3 {
-  margin: 0 0 10px 0;
-}
-
-.feature-card p {
-  margin: 0;
-  line-height: 1.5;
-  color: #5a4a80;
-}
-
-.footer-links {
-  text-align: center;
-  font-size: 13px;
-  color: #5a4a80;
-  margin: 20px 0 10px 0;
-}
-
-.footer-links button {
-  border: none;
-  background: transparent;
-  color: #5a35b1;
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-@media (min-width: 800px) {
-  .hero-card {
-    grid-template-columns: 180px 1fr;
-    align-items: center;
-  }
-
-  .notice-box {
-    grid-column: 1 / -1;
-  }
-
-  .feature-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
     @media (min-width: 700px) {
       .app {
         padding: 24px;
@@ -634,12 +614,12 @@
         font-size: 30px;
       }
 
-      .nav-actions {
+      .brand {
         width: auto;
       }
 
-      .home-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .nav-actions {
+        width: auto;
       }
 
       .subject-grid {
@@ -656,6 +636,21 @@
 
       textarea {
         min-height: 220px;
+      }
+    }
+
+    @media (min-width: 800px) {
+      .hero-card {
+        grid-template-columns: 220px 1fr;
+        align-items: center;
+      }
+
+      .notice-box {
+        grid-column: 1 / -1;
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(4, 1fr);
       }
     }
   </style>
@@ -675,140 +670,114 @@
             <div class="dropdown-content">
               <button type="button" onclick="oeffneTrainerMitTeilbereich('HQ')">HQ – Handlungsspezifische Qualifikationen</button>
               <button type="button" onclick="oeffneTrainerMitTeilbereich('WQ')">WQ – Wirtschaftsbezogene Qualifikationen</button>
-              <button type="button" onclick="zeigeBereich('trainerView')">Trainer öffnen</button>
             </div>
           </div>
 
           <button class="nav-btn" id="navLernstand" onclick="zeigeBereich('lernstandView')">Lernstand</button>
           <button class="nav-btn" id="navGlossar" onclick="zeigeBereich('glossarView')">Glossar</button>
-<button class="nav-btn" id="navFormeln" onclick="zeigeBereich('formelView')">Formelsammlung</button>
-<button class="nav-btn" id="navPruefung" onclick="zeigeBereich('pruefungView')">Prüfungssimulation</button>
-<button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
-<button class="nav-btn" onclick="hinweisAnzeigen()">Nutzungshinweis</button>
+          <button class="nav-btn" id="navFormeln" onclick="zeigeBereich('formelView')">Formelsammlung</button>
+          <button class="nav-btn" id="navPruefung" onclick="zeigeBereich('pruefungView')">Prüfungssimulation</button>
+          <button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
+          <button class="nav-btn" id="navKilian" onclick="zeigeBereich('kilianView')">Frag Kilian</button>
+          <button class="nav-btn" onclick="hinweisAnzeigen()">Nutzungshinweis</button>
         </div>
       </nav>
 
       <section class="view active" id="startView">
- <div class="hero-card">
+        <div class="hero-card">
+          <div class="hero-icon">🎓</div>
 
-  <div class="hero-icon">🎓</div>
+          <div class="hero-text">
+            <h1>WiFa Trainer</h1>
 
-  <div class="hero-text">
-    <h1>WiFa Trainer</h1>
+            <p>
+              Willkommen beim WiFa Trainer – einem digitalen Lernbereich zur Vorbereitung
+              auf kaufmännische Prüfungen und Weiterbildungen.
+            </p>
 
-    <p>
-      Willkommen beim WiFa Trainer – einem digitalen Lernbereich zur Vorbereitung
-      auf kaufmännische Prüfungen und Weiterbildungen.
-    </p>
+            <p>
+              Die Plattform entstand ursprünglich zur Unterstützung bei der Vorbereitung
+              auf die Prüfung zum Wirtschaftsfachwirt und richtet sich besonders an Lernende,
+              die offene Fragen trainieren, Wissen strukturieren und ihren Lernstand
+              nachvollziehen möchten.
+            </p>
 
-    <p>
-      Die Plattform entstand ursprünglich zur Unterstützung bei der Vorbereitung
-      auf die Prüfung zum Wirtschaftsfachwirt und richtet sich besonders an Lernende,
-      die offene Fragen trainieren, Wissen strukturieren und ihren Lernstand
-      nachvollziehen möchten.
-    </p>
+            <p>
+              Gleichzeitig eignet sich der WiFa Trainer auch zur Wiederholung kaufmännischer
+              Grundlagen in vielen weiteren Aus- und Weiterbildungen.
+            </p>
+          </div>
 
-    <p>
-      Gleichzeitig eignet sich der WiFa Trainer auch zur Wiederholung kaufmännischer
-      Grundlagen in vielen weiteren Aus- und Weiterbildungen.
-    </p>
-  </div>
+          <div class="notice-box">
+            <strong>Wichtiger Hinweis</strong>
+            <p>
+              Der WiFa Trainer ist ein unabhängiges Lernprojekt und steht in keiner Verbindung zur IHK.
+              Die Inhalte dienen ausschließlich der privaten Prüfungsvorbereitung und Orientierung.
+            </p>
+          </div>
+        </div>
 
-  <div class="notice-box">
-    <strong>Wichtiger Hinweis</strong>
+        <div class="card">
+          <h2 class="section-title">Die Funktionen im Überblick</h2>
 
-    <p>
-      Der WiFa Trainer ist ein unabhängiges Lernprojekt und steht in keiner
-      Verbindung zur IHK. Die Inhalte dienen ausschließlich der privaten
-      Prüfungsvorbereitung und Orientierung.
-    </p>
-  </div>
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🎓</div>
+              <h3>WIFA Trainer</h3>
+              <p>Offene Fragen beantworten, Antworten auswerten lassen und gezielt Wissenslücken erkennen.</p>
+            </div>
 
-</div>
+            <div class="feature-card">
+              <div class="feature-icon">📊</div>
+              <h3>Lernstand</h3>
+              <p>Fortschritte nach Fach und Thema nachvollziehen und Ergebnisse speichern.</p>
+            </div>
 
-<div class="card">
-  <h2 class="section-title">Die Funktionen im Überblick</h2>
+            <div class="feature-card">
+              <div class="feature-icon">📚</div>
+              <h3>Glossar</h3>
+              <p>Fachbegriffe, Synonyme und kurze Erklärungen schnell nachschlagen.</p>
+            </div>
 
-  <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-icon">📐</div>
+              <h3>Formelsammlung</h3>
+              <p>Wichtige Formeln, Abkürzungen und spätere Seitenangaben gesammelt an einem Ort.</p>
+            </div>
 
-    <div class="feature-card">
-      <div class="feature-icon">🎓</div>
-      <h3>WIFA Trainer</h3>
-      <p>
-        Offene Fragen beantworten, Antworten auswerten lassen und gezielt Wissenslücken erkennen.
-      </p>
-    </div>
+            <div class="feature-card">
+              <div class="feature-icon">🎯</div>
+              <h3>Prüfungssimulation</h3>
+              <p>Später realistische Prüfungssituationen mit Zeitdruck und Punkteauswertung trainieren.</p>
+            </div>
 
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <h3>Lernstand</h3>
-      <p>
-        Fortschritte nach Fach und Thema nachvollziehen und Ergebnisse speichern.
-      </p>
-    </div>
+            <div class="feature-card">
+              <div class="feature-icon">🗂️</div>
+              <h3>Wissensdatenbank</h3>
+              <p>Zusammenfassungen, Merksätze und zusätzliche Lerninhalte.</p>
+            </div>
 
-    <div class="feature-card">
-      <div class="feature-icon">📚</div>
-      <h3>Glossar</h3>
-      <p>
-        Fachbegriffe, Synonyme und kurze Erklärungen schnell nachschlagen.
-      </p>
-    </div>
+            <div class="feature-card">
+              <div class="feature-icon">ℹ️</div>
+              <h3>Nutzung</h3>
+              <p>Hinweise zur Nutzung, Funktionen und Tipps zum Lernen.</p>
+            </div>
 
-    <div class="feature-card">
-      <div class="feature-icon">📐</div>
-      <h3>Formelsammlung</h3>
-      <p>
-        Wichtige Formeln, Abkürzungen und spätere Seitenangaben gesammelt an einem Ort.
-      </p>
-    </div>
+            <div class="feature-card">
+              <div class="feature-icon">💬</div>
+              <h3>Frag Kilian</h3>
+              <p>Direkter KI-Helfer für Verständnisfragen, Erklärungen und Unterstützung beim Lernen.</p>
+            </div>
+          </div>
+        </div>
 
-    <div class="feature-card">
-      <div class="feature-icon">🎯</div>
-      <h3>Prüfungssimulation</h3>
-      <p>
-        Später realistische Prüfungssituationen mit Zeitdruck und Punkteauswertung trainieren.
-      </p>
-    </div>
+        <div class="footer-links">
+          <span>© Sabine Becker 2026</span>
+          <button onclick="zeigeBereich('impressumView')">Impressum</button>
+          <button onclick="zeigeBereich('datenschutzView')">Datenschutzerklärung</button>
+        </div>
+      </section>
 
-    <div class="feature-card">
-      <div class="feature-icon">🗂️</div>
-      <h3>Wissensdatenbank</h3>
-      <p>
-        Zusammenfassungen, Merksätze und zusätzliche Lerninhalte.
-      </p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">ℹ️</div>
-      <h3>Nutzung</h3>
-      <p>
-        Hinweise zur Nutzung, Funktionen und Tipps zum Lernen.
-      </p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">💬</div>
-      <h3>Frag Kilian</h3>
-      <p>
-        Direkter KI-Helfer für Verständnisfragen, Erklärungen und Unterstützung beim Lernen.
-      </p>
-    </div>
-
-  </div>
-</div>
-
-<div class="footer-links">
-  <span>© Sabine Becker 2026</span>
-
-  <button onclick="zeigeBereich('impressumView')">
-    Impressum
-  </button>
-
-  <button onclick="zeigeBereich('datenschutzView')">
-    Datenschutzerklärung
-  </button>
-</div>
       <section class="view" id="trainerView">
         <div class="header">
           <h1>WIFA Trainer</h1>
@@ -962,33 +931,34 @@
           </div>
         </div>
       </section>
-<section class="view" id="formelView">
-  <div class="header">
-    <h1>Formelsammlung</h1>
-    <p>IHK-Formeln, Abkürzungen und Hinweise zur Anwendung.</p>
-  </div>
 
-  <div class="card">
-    <h2 class="section-title">Formelsammlung</h2>
-    <div class="placeholder-box">
-      Hier entsteht die Formelsammlung mit IHK-Stand, Seitenangaben, Formelzeichen und kurzen Erklärungen.
-    </div>
-  </div>
-</section>
+      <section class="view" id="formelView">
+        <div class="header">
+          <h1>Formelsammlung</h1>
+          <p>Formeln, Abkürzungen und Hinweise zur Anwendung.</p>
+        </div>
 
-<section class="view" id="pruefungView">
-  <div class="header">
-    <h1>Prüfungssimulation</h1>
-    <p>Realistische Übung unter Zeitdruck – später mit gemischten Aufgaben und Punkteauswertung.</p>
-  </div>
+        <div class="card">
+          <h2 class="section-title">Formelsammlung</h2>
+          <div class="placeholder-box">
+            Hier entsteht die Formelsammlung mit Stand, Seitenangaben, Formelzeichen und kurzen Erklärungen.
+          </div>
+        </div>
+      </section>
 
-  <div class="card">
-    <h2 class="section-title">Prüfungssimulation</h2>
-    <div class="placeholder-box">
-      Dieser Bereich ist vorbereitet. Die Prüfungssimulation wird später ergänzt.
-    </div>
-  </div>
-</section>
+      <section class="view" id="pruefungView">
+        <div class="header">
+          <h1>Prüfungssimulation</h1>
+          <p>Realistische Übung unter Zeitdruck – später mit gemischten Aufgaben und Punkteauswertung.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Prüfungssimulation</h2>
+          <div class="placeholder-box">
+            Dieser Bereich ist vorbereitet. Die Prüfungssimulation wird später ergänzt.
+          </div>
+        </div>
+      </section>
 
       <section class="view" id="wissenView">
         <div class="header">
@@ -1004,31 +974,45 @@
         </div>
       </section>
 
+      <section class="view" id="kilianView">
+        <div class="header">
+          <h1>Frag Kilian</h1>
+          <p>Direkter KI-Helfer für Verständnisfragen, Erklärungen und Unterstützung beim Lernen.</p>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Frag Kilian</h2>
+          <div class="placeholder-box">
+            Hier wird später der KI-Chat eingebunden. Bis dahin bleibt dieser Bereich als vorbereiteter Platzhalter bestehen.
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="impressumView">
+        <div class="header">
+          <h1>Impressum</h1>
+          <p>Angaben gemäß § 5 TMG.</p>
+        </div>
+
+        <div class="card">
+          <p>Hier werden deine Impressumsdaten ergänzt.</p>
+        </div>
+      </section>
+
+      <section class="view" id="datenschutzView">
+        <div class="header">
+          <h1>Datenschutzerklärung</h1>
+          <p>Informationen zum Umgang mit Daten.</p>
+        </div>
+
+        <div class="card">
+          <p>Hier wird die Datenschutzerklärung ergänzt.</p>
+        </div>
+      </section>
+
     </div>
   </div>
 
-  <section class="view" id="impressumView">
-  <div class="header">
-    <h1>Impressum</h1>
-    <p>Angaben gemäß § 5 TMG.</p>
-  </div>
-
-  <div class="card">
-    <p>Hier werden deine Impressumsdaten ergänzt.</p>
-  </div>
-</section>
-
-<section class="view" id="datenschutzView">
-  <div class="header">
-    <h1>Datenschutzerklärung</h1>
-    <p>Informationen zum Umgang mit Daten.</p>
-  </div>
-
-  <div class="card">
-    <p>Hier wird die Datenschutzerklärung ergänzt.</p>
-  </div>
-</section>
-  
   <button id="hinweisInfoButton" onclick="hinweisAnzeigen()" style="
     position: fixed;
     left: 16px;
@@ -1094,7 +1078,7 @@
       </p>
 
       <p style="font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 18px;">
-        Das Bewertungssystem bietet lediglich eine Orientierung und stellt keine verbindliche Bewertung im Sinne einer IHK-Prüfung dar.
+        Das Bewertungssystem bietet lediglich eine Orientierung und stellt keine verbindliche Bewertung im Sinne einer Prüfung dar.
       </p>
 
       <label id="hinweisCheckboxWrap" style="
@@ -1146,21 +1130,6 @@
         </button>
       </div>
     </div>
-  </div>
-
-  <div style="
-    position: fixed;
-    right: 12px;
-    bottom: 12px;
-    font-size: 12px;
-    color: rgba(0,0,0,0.65);
-    background: rgba(255,255,255,0.75);
-    padding: 4px 8px;
-    border-radius: 8px;
-    z-index: 9997;
-    font-family: Arial, sans-serif;
-  ">
-    © Sabine Becker
   </div>
 
   <script>
@@ -1237,9 +1206,10 @@
     if (viewId === "trainerView") document.getElementById("navTrainer").classList.add("active");
     if (viewId === "lernstandView") document.getElementById("navLernstand").classList.add("active");
     if (viewId === "glossarView") document.getElementById("navGlossar").classList.add("active");
-if (viewId === "formelView") document.getElementById("navFormeln").classList.add("active");
-if (viewId === "pruefungView") document.getElementById("navPruefung").classList.add("active");
-if (viewId === "wissenView") document.getElementById("navWissen").classList.add("active");
+    if (viewId === "formelView") document.getElementById("navFormeln").classList.add("active");
+    if (viewId === "pruefungView") document.getElementById("navPruefung").classList.add("active");
+    if (viewId === "wissenView") document.getElementById("navWissen").classList.add("active");
+    if (viewId === "kilianView") document.getElementById("navKilian").classList.add("active");
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -1980,122 +1950,123 @@ if (viewId === "wissenView") document.getElementById("navWissen").classList.add(
   function hinweisNurSchliessen() {
     document.getElementById("hinweisOverlay").style.display = "none";
   }
-async function ladeLernstand() {
-  if (appIstBeschaeftigt) return;
 
-  try {
-    setzeAppBeschaeftigt(true);
+  async function ladeLernstand() {
+    if (appIstBeschaeftigt) return;
 
-    const status = document.getElementById("lernstandStatus");
-    const liste = document.getElementById("lernstandListe");
+    try {
+      setzeAppBeschaeftigt(true);
 
-    status.textContent = "Lernstand wird geladen...";
-    liste.className = "result-list-empty";
-    liste.innerHTML = "Bitte kurz warten...";
+      const status = document.getElementById("lernstandStatus");
+      const liste = document.getElementById("lernstandListe");
 
-    const result = await apiGet("getLernstand", {
-      nutzer: aktuellerNutzer
-    });
-
-    if (!result.success) {
-      throw new Error(result.error || "Lernstand konnte nicht geladen werden.");
-    }
-
-    const daten = result.data || [];
-
-    if (!daten.length) {
-      status.textContent = "Keine gespeicherten Einträge gefunden.";
+      status.textContent = "Lernstand wird geladen...";
       liste.className = "result-list-empty";
-      liste.innerHTML = "Für diesen Nutzer-Code wurde noch kein Lernstand gefunden.";
-      return;
-    }
+      liste.innerHTML = "Bitte kurz warten...";
 
-    status.textContent = daten.length + " gespeicherte Auswertungen geladen.";
-    liste.className = "";
+      const result = await apiGet("getLernstand", {
+        nutzer: aktuellerNutzer
+      });
 
-    const fachMap = {};
-
-    daten.forEach(function(eintrag) {
-      const key = String(eintrag.teilbereich || "") + "||" + String(eintrag.fach || "");
-
-      if (!fachMap[key]) {
-        fachMap[key] = {
-          teilbereich: eintrag.teilbereich || "",
-          fach: eintrag.fach || "",
-          erreicht: 0,
-          max: 0,
-          anzahl: 0,
-          eintraege: []
-        };
+      if (!result.success) {
+        throw new Error(result.error || "Lernstand konnte nicht geladen werden.");
       }
 
-      fachMap[key].erreicht += Number(eintrag.punkte || 0);
-      fachMap[key].max += Number(eintrag.maxPunkte || 0);
-      fachMap[key].anzahl += 1;
-      fachMap[key].eintraege.push(eintrag);
-    });
+      const daten = result.data || [];
 
-    const fachBloecke = Object.values(fachMap);
+      if (!daten.length) {
+        status.textContent = "Keine gespeicherten Einträge gefunden.";
+        liste.className = "result-list-empty";
+        liste.innerHTML = "Für diesen Nutzer-Code wurde noch kein Lernstand gefunden.";
+        return;
+      }
 
-    liste.innerHTML = fachBloecke.map(function(fachBlock, index) {
-      const prozent = fachBlock.max > 0
-        ? Math.round((fachBlock.erreicht / fachBlock.max) * 100)
-        : 0;
+      status.textContent = daten.length + " gespeicherte Auswertungen geladen.";
+      liste.className = "";
 
-      return `
-        <div class="result-mini-entry">
-          <div class="result-mini-head">
-            <div class="result-mini-title">
-              ${escapeHtml(fachBlock.teilbereich)} · ${escapeHtml(fachBlock.fach)}
+      const fachMap = {};
+
+      daten.forEach(function(eintrag) {
+        const key = String(eintrag.teilbereich || "") + "||" + String(eintrag.fach || "");
+
+        if (!fachMap[key]) {
+          fachMap[key] = {
+            teilbereich: eintrag.teilbereich || "",
+            fach: eintrag.fach || "",
+            erreicht: 0,
+            max: 0,
+            anzahl: 0,
+            eintraege: []
+          };
+        }
+
+        fachMap[key].erreicht += Number(eintrag.punkte || 0);
+        fachMap[key].max += Number(eintrag.maxPunkte || 0);
+        fachMap[key].anzahl += 1;
+        fachMap[key].eintraege.push(eintrag);
+      });
+
+      const fachBloecke = Object.values(fachMap);
+
+      liste.innerHTML = fachBloecke.map(function(fachBlock, index) {
+        const prozent = fachBlock.max > 0
+          ? Math.round((fachBlock.erreicht / fachBlock.max) * 100)
+          : 0;
+
+        return `
+          <div class="result-mini-entry">
+            <div class="result-mini-head">
+              <div class="result-mini-title">
+                ${escapeHtml(fachBlock.teilbereich)} · ${escapeHtml(fachBlock.fach)}
+              </div>
+              <div class="result-mini-score">
+                ${prozent}%
+              </div>
             </div>
-            <div class="result-mini-score">
-              ${prozent}%
+
+            <div class="result-mini-bar">
+              <div class="result-mini-fill" style="width: ${prozent}%;"></div>
+            </div>
+
+            <div class="result-mini-footer">
+              <span>${fachBlock.erreicht} / ${fachBlock.max} Punkte · ${fachBlock.anzahl} Auswertungen</span>
+              <button class="secondary-btn" style="padding:6px 10px; font-size:12px; width:auto;" onclick="toggleDetails(${index})">
+                Details
+              </button>
+            </div>
+
+            <div id="details-${index}" style="display:none; margin-top:10px;">
+              ${fachBlock.eintraege.map(function(eintrag) {
+                const einzelProzent = Number(eintrag.maxPunkte || 0) > 0
+                  ? Math.round((Number(eintrag.punkte || 0) / Number(eintrag.maxPunkte || 0)) * 100)
+                  : Number(eintrag.prozent || 0);
+
+                return `
+                  <div style="margin-top:10px; font-size:13px; color:#5a4a80; border-top:1px solid #eadfff; padding-top:8px; line-height:1.5;">
+                    <strong>${einzelProzent}%</strong> · ${escapeHtml(eintrag.punkte)} / ${escapeHtml(eintrag.maxPunkte)} Punkte · ${escapeHtml(eintrag.datum)}<br>
+                    <strong>Thema:</strong> ${escapeHtml(eintrag.thema)}<br>
+                    <strong>Frage:</strong> ${escapeHtml(eintrag.frage || eintrag.frageId || "Frage nicht gefunden")}
+                  </div>
+                `;
+              }).join("")}
             </div>
           </div>
+        `;
+      }).join("");
 
-          <div class="result-mini-bar">
-            <div class="result-mini-fill" style="width: ${prozent}%;"></div>
-          </div>
-
-          <div class="result-mini-footer">
-            <span>${fachBlock.erreicht} / ${fachBlock.max} Punkte · ${fachBlock.anzahl} Auswertungen</span>
-            <button class="secondary-btn" style="padding:6px 10px; font-size:12px; width:auto;" onclick="toggleDetails(${index})">
-              Details
-            </button>
-          </div>
-
-          <div id="details-${index}" style="display:none; margin-top:10px;">
-            ${fachBlock.eintraege.map(function(eintrag) {
-              const einzelProzent = Number(eintrag.maxPunkte || 0) > 0
-                ? Math.round((Number(eintrag.punkte || 0) / Number(eintrag.maxPunkte || 0)) * 100)
-                : Number(eintrag.prozent || 0);
-
-              return `
-                <div style="margin-top:10px; font-size:13px; color:#5a4a80; border-top:1px solid #eadfff; padding-top:8px; line-height:1.5;">
-                  <strong>${einzelProzent}%</strong> · ${escapeHtml(eintrag.punkte)} / ${escapeHtml(eintrag.maxPunkte)} Punkte · ${escapeHtml(eintrag.datum)}<br>
-                  <strong>Thema:</strong> ${escapeHtml(eintrag.thema)}<br>
-                  <strong>Frage:</strong> ${escapeHtml(eintrag.frage || eintrag.frageId || "Frage nicht gefunden")}
-                </div>
-              `;
-            }).join("")}
-          </div>
-        </div>
-      `;
-    }).join("");
-
-  } catch (error) {
-    document.getElementById("lernstandStatus").textContent =
-      "Fehler beim Laden: " + error.message;
-  } finally {
-    setzeAppBeschaeftigt(false);
+    } catch (error) {
+      document.getElementById("lernstandStatus").textContent =
+        "Fehler beim Laden: " + error.message;
+    } finally {
+      setzeAppBeschaeftigt(false);
+    }
   }
-}
 
-function toggleDetails(index) {
-  const el = document.getElementById("details-" + index);
-  if (!el) return;
-  el.style.display = el.style.display === "none" ? "block" : "none";
-}
-</script>
+  function toggleDetails(index) {
+    const el = document.getElementById("details-" + index);
+    if (!el) return;
+    el.style.display = el.style.display === "none" ? "block" : "none";
+  }
+  </script>
 </body>
 </html>
