@@ -2575,7 +2575,8 @@ function audioStoppen() {
   document.getElementById("audioStatus").textContent =
     "Audio gestoppt.";
 }
-    async function frageKilian() {
+    
+async function frageKilian() {
   const frage = document.getElementById("kilianInput").value.trim();
 
   if (!frage) {
@@ -2584,32 +2585,28 @@ function audioStoppen() {
   }
 
   try {
-    document.getElementById("kilianStatus").textContent =
-      "Kilian denkt nach...";
+    document.getElementById("kilianStatus").textContent = "Kilian denkt nach.";
+    document.getElementById("kilianAntwort").textContent = "Antwort wird geladen.";
 
-    document.getElementById("kilianAntwort").textContent =
-      "Antwort wird geladen...";
-
-    const result = await apiPost("frageKilian", {
+    const kilianResult = await apiPost("frageKilian", {
       frage: frage
     });
 
-    if (!result.success) {
-      throw new Error(result.error || "Fehler bei der Anfrage.");
+    if (!kilianResult.success) {
+      throw new Error(kilianResult.error || "Fehler bei der Anfrage.");
     }
 
     document.getElementById("kilianAntwort").innerHTML =
-      formatKilianAntwort(result.data?.antwort || "Keine Antwort erhalten.");
+      formatKilianAntwort(kilianResult.data?.antwort || "Keine Antwort erhalten.");
 
-    document.getElementById("kilianStatus").textContent =
-      "Antwort erhalten.";
+    document.getElementById("kilianStatus").textContent = "Antwort erhalten.";
 
   } catch (error) {
     document.getElementById("kilianStatus").textContent =
       "Fehler: " + error.message;
   }
 }
-
+    
 function kilianLeeren() {
   document.getElementById("kilianInput").value = "";
 
