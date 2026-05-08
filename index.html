@@ -1208,6 +1208,13 @@ white-space: normal;
 >
   Timer stoppen
 </button>
+        <button
+  class="primary-btn"
+  onclick="pruefungManuellAbgeben()"
+  style="margin-top:10px;"
+>
+  Prüfung abgeben
+</button>
 </section>
 
      <section class="view" id="wissenView">
@@ -3483,6 +3490,32 @@ function pruefungBeendenWegenZeitablauf() {
 
   document.getElementById("pruefungStatus").textContent =
     "Prüfung beendet: Zeit abgelaufen.";
+}
+    function pruefungManuellAbgeben() {
+
+  const bestaetigt = confirm(
+    "Möchtest du die Prüfung wirklich abgeben?"
+  );
+
+  if (!bestaetigt) {
+    return;
+  }
+
+  clearInterval(pruefungTimerInterval);
+
+  document.querySelectorAll(
+    "#pruefungContainer textarea"
+  ).forEach(function(textarea) {
+
+    textarea.disabled = true;
+    textarea.style.background = "#f3f4f6";
+  });
+
+  document.getElementById("pruefungStatus").textContent =
+    "Prüfung manuell abgegeben.";
+
+  document.getElementById("pruefungTimerText").textContent =
+    "Prüfung beendet";
 }
     function stoppePruefungTimer() {
 
