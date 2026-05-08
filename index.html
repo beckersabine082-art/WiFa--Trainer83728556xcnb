@@ -1687,6 +1687,7 @@ style="margin-top:10px; display:block; margin-left:auto; margin-right:auto;"
   let aktuelleFrage = "";
   let pruefungTimerInterval = null;
   let pruefungRestzeitSekunden = 0;
+  let aktuellePruefungsDaten = [];
   let aktuellesThema = "";
   let aktuelleMusterloesung = "";
   let aktuelleFrageId = "";
@@ -2614,6 +2615,7 @@ if (daten.bilddatei) {
       }
 
       const daten = result.data || [];
+      aktuellePruefungsDaten = daten;
 const fachSelect =
   document.getElementById("pruefungFachSelect");
 
