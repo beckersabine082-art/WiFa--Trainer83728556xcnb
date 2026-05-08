@@ -3123,9 +3123,22 @@ function startePruefungSimulation() {
 
   try {
 
-    const response = await fetch(
-API_BASE_URL + "?action=getPruefungSimulation&fach=" + encodeURIComponent(document.getElementById("pruefungFachSelect").value)    );
+   const teilbereich =
+  document.getElementById("pruefungTeilbereichSelect").value;
 
+const simulation =
+  document.getElementById("pruefungSimulationSelect").value;
+
+const einheit =
+  document.getElementById("pruefungFachSelect").value;
+
+const response = await fetch(
+  API_BASE_URL
+  + "?action=getPruefungSimulation"
+  + "&teilbereich=" + encodeURIComponent(teilbereich)
+  + "&simulation=" + encodeURIComponent(simulation)
+  + "&einheit=" + encodeURIComponent(einheit)
+);
     const result = await response.json();
 
     if (!result.success) {
