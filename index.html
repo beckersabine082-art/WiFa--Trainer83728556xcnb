@@ -1681,6 +1681,8 @@ document.addEventListener("click", function() {
   let aktuellerTeilbereich = "";
   let aktuellesFach = "";
   let aktuelleFrage = "";
+  let pruefungTimerInterval = null;
+  let pruefungRestzeitSekunden = 0;
   let aktuellesThema = "";
   let aktuelleMusterloesung = "";
   let aktuelleFrageId = "";
@@ -3408,7 +3410,63 @@ function kilianBubbleAudioStoppen() {
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
   }
-}   
+}  
+    function startePruefungTimer(minuten) {
+
+  clearInterval(pruefungTimerInterval);
+
+  pruefungRestzeitSekunden = minuten * 60;
+
+  const timerBox =
+    document.getElementById("pruefungTimerBox");
+
+  const timerText =
+    document.getElementById("pruefungTimerText");
+
+  timerBox.style.display = "flex";
+
+  aktualisierePruefungTimerAnzeige();
+
+  pruefungTimerInterval = setInterval(function() {
+
+    pruefungRestzeitSekunden--;
+
+    aktualisierePruefungTimerAnzeige();
+
+    if (pruefungRestzeitSekunden <= 0) {
+
+      clearInterval(pruefungTimerInterval);
+
+      timerText.textContent = "Zeit abgelaufen";
+
+      document.querySelectorAll(
+        "#pruefungContainer textarea"
+      ).forEach(function(textarea) {
+
+        textarea.disabled = true;
+      });
+
+      alert(
+        "Die Bearbeitungszeit ist abgelaufen."
+      );
+    }
+
+  }, 1000);
+}
+
+function aktualisierePruefungTimerAnzeige() {
+
+  const minuten =
+    Math.floor(pruefungRestzeitSekunden / 60);
+
+  const sekunden =
+    pruefungRestzeitSekunden % 60;
+
+  document.getElementById("pruefungTimerText").textContent =
+    String(minuten).padStart(2, "0")
+    + ":"
+    + String(sekunden).padStart(2, "0");
+}
   </script>
 </body>
 </html>
