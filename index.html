@@ -1199,6 +1199,13 @@ white-space: normal;
   <span class="timer-icon">⏳</span>
   <span id="pruefungTimerText">00:00</span>
 </div>
+        <button
+  class="secondary-btn"
+  onclick="stoppePruefungTimer()"
+  style="margin-top:10px;"
+>
+  Timer stoppen
+</button>
 </section>
 
      <section class="view" id="wissenView">
@@ -3413,8 +3420,8 @@ function kilianBubbleAudioStoppen() {
 }  
     function startePruefungTimer(minuten) {
 
-  clearInterval(pruefungTimerInterval);
-
+stoppePruefungTimer();
+      
   pruefungRestzeitSekunden = minuten * 60;
 
   const timerBox =
@@ -3454,6 +3461,21 @@ function kilianBubbleAudioStoppen() {
   }, 1000);
 }
 
+    function stoppePruefungTimer() {
+
+  clearInterval(pruefungTimerInterval);
+
+  pruefungTimerInterval = null;
+
+  pruefungRestzeitSekunden = 0;
+
+  document.getElementById("pruefungTimerText").textContent =
+    "00:00";
+
+  document.getElementById("pruefungTimerBox").style.display =
+    "none";
+}
+    
 function aktualisierePruefungTimerAnzeige() {
 
   const minuten =
