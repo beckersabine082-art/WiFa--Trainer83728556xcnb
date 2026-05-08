@@ -627,6 +627,103 @@ white-space: normal;
   max-height: 260px;
   overflow-y: auto;
 }
+    #kilianBubbleButton {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9998;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: #b794f6;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+  cursor: pointer;
+}
+
+#kilianBubbleFenster {
+  position: fixed;
+  right: 16px;
+  bottom: 76px;
+  width: min(360px, calc(100vw - 32px));
+  max-height: 75vh;
+  display: none;
+  z-index: 9999;
+  background: #ffffff;
+  border: 1px solid #d8c8f8;
+  border-radius: 18px;
+  box-shadow: 0 10px 34px rgba(0,0,0,0.25);
+  padding: 12px;
+  overflow: hidden;
+}
+
+.kilian-bubble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color: #2d1f46;
+}
+
+.kilian-bubble-header button {
+  width: auto;
+  border: none;
+  background: #efe7ff;
+  color: #2d1f46;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#kilianBubbleInput {
+  min-height: 80px;
+  max-height: 160px;
+  resize: vertical;
+}
+
+.kilian-bubble-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.kilian-bubble-buttons button {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 8px;
+  background: #efe7ff;
+  color: #2d1f46;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.kilian-bubble-buttons button:first-child {
+  background: #b794f6;
+  color: #ffffff;
+}
+
+#kilianBubbleStatus {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #5a4a80;
+}
+
+#kilianBubbleAntwort {
+  margin-top: 10px;
+  max-height: 260px;
+  overflow-y: auto;
+  background: #faf7ff;
+  border: 1px solid #eadfff;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #2d1f46;
+}
+    
   .question-box table {
   width: 100%;
   border-collapse: collapse;
@@ -1364,6 +1461,34 @@ white-space: normal;
     </div>
   </div>
 
+    <div id="kilianBubbleButton" onclick="toggleKilianBubble()">
+  💬 Frag Kilian
+</div>
+
+<div id="kilianBubbleFenster">
+  <div class="kilian-bubble-header">
+    <strong>Frag Kilian</strong>
+    <button type="button" onclick="toggleKilianBubble()">×</button>
+  </div>
+
+  <textarea
+    id="kilianBubbleInput"
+    placeholder="Stelle hier deine Frage..."
+  ></textarea>
+
+  <div class="kilian-bubble-buttons">
+    <button type="button" onclick="frageKilianBubble()">Senden</button>
+    <button type="button" onclick="kilianBubbleVorlesen()">Vorlesen</button>
+    <button type="button" onclick="kilianBubbleAudioStoppen()">Stopp</button>
+  </div>
+
+  <div id="kilianBubbleStatus">Kilian wartet auf deine Frage.</div>
+
+  <div id="kilianBubbleAntwort">
+    Hier erscheint Kilians Antwort.
+  </div>
+</div>
+    
   <button id="hinweisInfoButton" onclick="hinweisAnzeigen()" style="
     position: fixed;
     left: 16px;
@@ -3047,6 +3172,77 @@ function renderFormeln(daten) {
     `;
   }).join("");
 }
+ function toggleKilianBubble() {
+  const fenster = document.getElementById("kilianBubbleFenster");
+
+  fenster.style.display =
+    fenster.style.display === "block" ? "none" : "block";
+}
+
+async function frageKilianBubble() {
+  const frage = document.getElementById("kilianBubbleInput").value.trim();
+
+  if (!frage) {
+    alert("Bitte zuerst eine Frage eingeben.");
+    return;
+  }
+
+  try {
+    document.getElementById("kilianBubbleStatus").textContent =
+      "Kilian denkt nach...";
+
+    document.getElementById("kilianBubbleAntwort").innerHTML =
+      "Antwort wird geladen...";
+
+    const result = await apiPost("frageKilian", {
+      frage: frage
+    });
+
+    if (!result.success) {
+      throw new Error(result.error || "Fehler bei der Anfrage.");
+    }
+
+    const antwort =
+      result.data?.antwort || "Keine Antwort erhalten.";
+
+    document.getElementById("kilianBubbleAntwort").innerHTML =
+      formatKilianAntwort(antwort);
+
+    document.getElementById("kilianBubbleStatus").textContent =
+      "Antwort erhalten.";
+
+  } catch (error) {
+    document.getElementById("kilianBubbleStatus").textContent =
+      "Fehler: " + error.message;
+  }
+}
+
+function kilianBubbleVorlesen() {
+  if (!("speechSynthesis" in window)) {
+    return;
+  }
+
+  const text =
+    document.getElementById("kilianBubbleAntwort").textContent;
+
+  if (!text.trim()) return;
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = "de-DE";
+  utterance.rate = 0.95;
+  utterance.pitch = 1;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function kilianBubbleAudioStoppen() {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}   
   </script>
 </body>
 </html>
