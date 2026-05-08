@@ -3608,7 +3608,12 @@ daten.push({
 
   console.log("Prüfungsantworten:", daten);
 
-  alert(
+const bewertung =
+  await bewertePruefungsAntworten(daten);
+
+console.log("Bewertung:", bewertung);
+
+alert(
     "Prüfung beendet.\n\n"
     + beantwortet
     + " von "
@@ -3616,6 +3621,21 @@ daten.push({
     + " Teilaufgaben wurden beantwortet.\n\n"
     + "Die Antworten wurden für die Auswertung vorbereitet."
   );
+}
+    async function bewertePruefungsAntworten(daten) {
+
+  const response = await fetch(API_BASE_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify({
+      action: "bewertePruefung",
+      daten: daten
+    })
+  });
+
+  return await response.json();
 }
   </script>
 </body>
