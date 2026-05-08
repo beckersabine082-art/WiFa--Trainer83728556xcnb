@@ -5,7 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>WiFa Trainer</title>
+function pruefungBeendenWegenZeitablauf() {
+  clearInterval(pruefungTimerInterval);
+  pruefungTimerInterval = null;
+  pruefungRestzeitSekunden = 0;
 
+  document.getElementById("pruefungTimerText").textContent =
+    "Zeit abgelaufen";
+
+  document.querySelectorAll("#pruefungContainer textarea").forEach(function(textarea) {
+    textarea.disabled = true;
+    textarea.style.background = "#f3f4f6";
+    textarea.style.cursor = "not-allowed";
+  });
+
+  document.querySelectorAll("#pruefungContainer button").forEach(function(button) {
+    button.disabled = true;
+    button.style.opacity = "0.6";
+    button.style.cursor = "not-allowed";
+  });
+
+  document.getElementById("pruefungTimerStatus").textContent =
+    "Die Bearbeitungszeit ist abgelaufen. Die Prüfung wurde gesperrt.";
+
+  document.getElementById("pruefungStatus").textContent =
+    "Prüfung beendet: Zeit abgelaufen.";
+}
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -3447,7 +3472,7 @@ function kilianBubbleAudioStoppen() {
 
 stoppePruefungTimer();
       
-  pruefungRestzeitSekunden = minuten * 60;
+  pruefungRestzeitSekunden = 10;
 
   const timerBox =
     document.getElementById("pruefungTimerBox");
