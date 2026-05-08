@@ -3465,27 +3465,37 @@ stoppePruefungTimer();
 
     aktualisierePruefungTimerAnzeige();
 
-    if (pruefungRestzeitSekunden <= 0) {
-
-      clearInterval(pruefungTimerInterval);
-
-      timerText.textContent = "Zeit abgelaufen";
-
-      document.querySelectorAll(
-        "#pruefungContainer textarea"
-      ).forEach(function(textarea) {
-
-        textarea.disabled = true;
-      });
-
-      alert(
-        "Die Bearbeitungszeit ist abgelaufen."
-      );
-    }
-
+   if (pruefungRestzeitSekunden <= 0) {
+  pruefungBeendenWegenZeitablauf();
+}
   }, 1000);
 }
+function pruefungBeendenWegenZeitablauf() {
+  clearInterval(pruefungTimerInterval);
+  pruefungTimerInterval = null;
+  pruefungRestzeitSekunden = 0;
 
+  document.getElementById("pruefungTimerText").textContent =
+    "Zeit abgelaufen";
+
+  document.querySelectorAll("#pruefungContainer textarea").forEach(function(textarea) {
+    textarea.disabled = true;
+    textarea.style.background = "#f3f4f6";
+    textarea.style.cursor = "not-allowed";
+  });
+
+  document.querySelectorAll("#pruefungContainer button").forEach(function(button) {
+    button.disabled = true;
+    button.style.opacity = "0.6";
+    button.style.cursor = "not-allowed";
+  });
+
+  document.getElementById("pruefungTimerStatus").textContent =
+    "Die Bearbeitungszeit ist abgelaufen. Die Prüfung wurde gesperrt.";
+
+  document.getElementById("pruefungStatus").textContent =
+    "Prüfung beendet: Zeit abgelaufen.";
+}
     function stoppePruefungTimer() {
 
   clearInterval(pruefungTimerInterval);
