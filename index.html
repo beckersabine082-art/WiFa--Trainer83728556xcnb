@@ -3571,14 +3571,28 @@ document.addEventListener("click", function() {
   const daten = [];
 
   antworten.forEach(function(textarea) {
-    daten.push({
-      simulationId: textarea.dataset.simulationId || "",
-      aufgabe: textarea.dataset.aufgabe || "",
-      teilaufgabe: textarea.dataset.teilaufgabe || "",
-      fach: textarea.dataset.fach || "",
-      thema: textarea.dataset.thema || "",
-      antwort: String(textarea.value || "").trim()
-    });
+    const simulationId = textarea.dataset.simulationId || "";
+const aufgabe = textarea.dataset.aufgabe || "";
+const teilaufgabe = textarea.dataset.teilaufgabe || "";
+
+const passendeAufgabe = aktuellePruefungsDaten.find(function(item) {
+  return String(item.simulationId) === String(simulationId)
+    && String(item.aufgabe) === String(aufgabe)
+    && String(item.teilaufgabe) === String(teilaufgabe);
+});
+
+daten.push({
+  simulationId: simulationId,
+  aufgabe: aufgabe,
+  teilaufgabe: teilaufgabe,
+  fach: textarea.dataset.fach || "",
+  thema: textarea.dataset.thema || "",
+  frage: passendeAufgabe?.frage || "",
+  musterloesung: passendeAufgabe?.musterloesung || "",
+  stichpunkte: passendeAufgabe?.stichpunkte || "",
+  maxPunkte: Number(passendeAufgabe?.punkte || 0),
+  antwort: String(textarea.value || "").trim()
+});
   });
 
   const beantwortet = daten.filter(function(eintrag) {
