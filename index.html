@@ -3613,14 +3613,33 @@ const bewertung =
 
 console.log("Bewertung:", bewertung);
 
-alert(
-    "Prüfung beendet.\n\n"
-    + beantwortet
-    + " von "
-    + daten.length
-    + " Teilaufgaben wurden beantwortet.\n\n"
-    + "Die Antworten wurden für die Auswertung vorbereitet."
-  );
+const gesamtPunkte =
+  Number(bewertung?.data?.gesamtPunkte || 0);
+
+const gesamtMaxPunkte =
+  Number(bewertung?.data?.gesamtMaxPunkte || 0);
+
+const prozent =
+  gesamtMaxPunkte > 0
+    ? Math.round((gesamtPunkte / gesamtMaxPunkte) * 100)
+    : 0;
+
+const bestanden =
+  prozent >= 50;
+
+document.getElementById("pruefungStatus").innerHTML =
+  `
+    <strong>Prüfung abgeschlossen</strong><br>
+    Punkte: ${gesamtPunkte} / ${gesamtMaxPunkte}<br>
+    Ergebnis: ${prozent}%<br>
+    Status:
+    <span style="
+      color:${bestanden ? "#16a34a" : "#dc2626"};
+      font-weight:700;
+    ">
+      ${bestanden ? "BESTANDEN" : "NICHT BESTANDEN"}
+    </span>
+  `;
 }
     async function bewertePruefungsAntworten(daten) {
 
