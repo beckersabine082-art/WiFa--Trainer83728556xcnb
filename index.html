@@ -1653,18 +1653,6 @@ white-space: normal;
     </div>
   </div>
 
-    function toggleTrainerDropdown(event) {
-  event.stopPropagation();
-
-  const dropdown = document.getElementById("navTrainer").closest(".dropdown");
-  dropdown.classList.toggle("open");
-}
-
-document.addEventListener("click", function() {
-  document.querySelectorAll(".dropdown.open").forEach(function(dropdown) {
-    dropdown.classList.remove("open");
-  });
-});
   <script>
   const API_BASE_URL = "https://script.google.com/macros/s/AKfycbxTymUhl29rdmXONuWRlVkoe8xiFXqVf2bWUju1XgC44l2qoUT3LTU_PownQrNHbBKUVA/exec";
 
@@ -3524,6 +3512,18 @@ function aktualisierePruefungTimerAnzeige() {
     + ":"
     + String(sekunden).padStart(2, "0");
 }
+    function toggleTrainerDropdown(event) {
+  event.stopPropagation();
+
+  const dropdown = document.getElementById("navTrainer").closest(".dropdown");
+  dropdown.classList.toggle("open");
+}
+
+document.addEventListener("click", function() {
+  document.querySelectorAll(".dropdown.open").forEach(function(dropdown) {
+    dropdown.classList.remove("open");
+  });
+});
   </script>
 </body>
 </html>
