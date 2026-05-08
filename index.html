@@ -2617,7 +2617,18 @@ if (daten.bilddatei) {
       }
 
       const daten = result.data || [];
+const fachSelect =
+  document.getElementById("pruefungFachSelect");
 
+const gewaehlteOption =
+  fachSelect.options[fachSelect.selectedIndex];
+
+const minuten =
+  Number(gewaehlteOption?.dataset?.zeit || 0);
+
+if (minuten > 0) {
+  startePruefungTimer(minuten);
+}
       if (!daten.length) {
         status.textContent = "Keine gespeicherten Einträge gefunden.";
         liste.className = "result-list-empty";
