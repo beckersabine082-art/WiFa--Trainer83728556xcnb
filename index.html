@@ -3516,6 +3516,7 @@ function pruefungBeendenWegenZeitablauf() {
 
   document.getElementById("pruefungTimerText").textContent =
     "Prüfung beendet";
+      startePruefungsAuswertung();
 }
     function stoppePruefungTimer() {
 
@@ -3557,6 +3558,37 @@ document.addEventListener("click", function() {
     dropdown.classList.remove("open");
   });
 });
+    async function startePruefungsAuswertung() {
+
+  const antworten = document.querySelectorAll(
+    "#pruefungContainer textarea"
+  );
+
+  let beantwortet = 0;
+
+  antworten.forEach(function(textarea) {
+    const text = String(textarea.value || "").trim();
+
+    if (text.length > 0) {
+      beantwortet++;
+    }
+  });
+
+  const status =
+    document.getElementById("pruefungStatus");
+
+  status.textContent =
+    "Prüfungsauswertung gestartet... "
+    + beantwortet
+    + " Aufgaben beantwortet.";
+
+  alert(
+    "Prüfung beendet.\n\n"
+    + beantwortet
+    + " Aufgaben wurden beantwortet.\n\n"
+    + "Die automatische KI-Auswertung wird als nächstes eingebaut."
+  );
+}
   </script>
 </body>
 </html>
