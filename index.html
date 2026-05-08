@@ -103,7 +103,7 @@
       z-index: 1000;
     }
 
-    .dropdown:hover .dropdown-content {
+    .dropdown.open .dropdown-content {
       display: block;
     }
 
@@ -828,8 +828,7 @@ white-space: normal;
           <button class="nav-btn active" id="navStart" onclick="zeigeBereich('startView')">Start</button>
 
           <div class="dropdown">
-            <button class="nav-btn" id="navTrainer" type="button">WIFA Trainer ▾</button>
-            <div class="dropdown-content">
+<button class="nav-btn" id="navTrainer" type="button" onclick="toggleTrainerDropdown(event)">WIFA Trainer ▾</button>            <div class="dropdown-content">
               <button type="button" onclick="oeffneTrainerMitTeilbereich('HQ')">HQ – Handlungsspezifische Qualifikationen</button>
               <button type="button" onclick="oeffneTrainerMitTeilbereich('WQ')">WQ – Wirtschaftsbezogene Qualifikationen</button>
             </div>
@@ -1645,6 +1644,18 @@ white-space: normal;
     </div>
   </div>
 
+    function toggleTrainerDropdown(event) {
+  event.stopPropagation();
+
+  const dropdown = document.getElementById("navTrainer").closest(".dropdown");
+  dropdown.classList.toggle("open");
+}
+
+document.addEventListener("click", function() {
+  document.querySelectorAll(".dropdown.open").forEach(function(dropdown) {
+    dropdown.classList.remove("open");
+  });
+});
   <script>
   const API_BASE_URL = "https://script.google.com/macros/s/AKfycbxTymUhl29rdmXONuWRlVkoe8xiFXqVf2bWUju1XgC44l2qoUT3LTU_PownQrNHbBKUVA/exec";
 
