@@ -3236,11 +3236,16 @@ if (minuten > 0) {
             ${item.frage}
           </div>
 
-          <textarea
-            class="input"
-            rows="6"
-            placeholder="Deine Antwort..."
-          ></textarea>
+         <textarea
+  class="input pruefung-antwort"
+  rows="6"
+  placeholder="Deine Antwort..."
+  data-simulation-id="${escapeHtml(item.simulationId)}"
+  data-aufgabe="${escapeHtml(item.aufgabe)}"
+  data-teilaufgabe="${escapeHtml(item.teilaufgabe)}"
+  data-fach="${escapeHtml(item.fach)}"
+  data-thema="${escapeHtml(item.thema)}"
+></textarea>
 
         </div>
       `;
