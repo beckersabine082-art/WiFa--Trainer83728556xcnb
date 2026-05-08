@@ -2995,6 +2995,111 @@ function kilianLeeren() {
   }
 }
 
+    const pruefungsFaecherNachTeilbereich = {
+  WQ: [
+    { fach: "VWL/BWL", zeit: 75, punkte: 100 },
+    { fach: "Rechnungswesen", zeit: 90, punkte: 100 },
+    { fach: "Recht", zeit: 75, punkte: 100 },
+    { fach: "Steuern", zeit: 75, punkte: 100 },
+    { fach: "Unternehmensführung", zeit: 90, punkte: 100 }
+  ],
+  HQ: [
+    { fach: "Betriebliches Management", zeit: 90, punkte: 100 },
+    { fach: "Führung und Zusammenarbeit", zeit: 90, punkte: 100 },
+    { fach: "Logistik", zeit: 90, punkte: 100 },
+    { fach: "Marketing", zeit: 90, punkte: 100 },
+    { fach: "Vertrieb", zeit: 90, punkte: 100 },
+    { fach: "Finance Controlling", zeit: 90, punkte: 100 }
+  ]
+};
+
+function pruefungTeilbereichWaehlen() {
+  const teilbereich = document.getElementById("pruefungTeilbereichSelect").value;
+  const simulationBereich = document.getElementById("pruefungSimulationBereich");
+  const simulationSelect = document.getElementById("pruefungSimulationSelect");
+  const fachBereich = document.getElementById("pruefungFachBereich");
+  const fachSelect = document.getElementById("pruefungFachSelect");
+
+  simulationSelect.innerHTML = '<option value="">-- Simulation wählen --</option>';
+  fachSelect.innerHTML = '<option value="">-- Prüfungsfach wählen --</option>';
+
+  fachBereich.style.display = "none";
+  document.getElementById("pruefungContainer").innerHTML = "";
+
+  if (!teilbereich) {
+    simulationBereich.style.display = "none";
+    document.getElementById("pruefungStatus").textContent =
+      "Bitte zuerst einen Teilbereich auswählen.";
+    return;
+  }
+
+  for (let i = 1; i <= 4; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = "Simulation " + i;
+    simulationSelect.appendChild(option);
+  }
+
+  simulationBereich.style.display = "block";
+  document.getElementById("pruefungStatus").textContent =
+    "Teilbereich gewählt. Bitte Simulation auswählen.";
+}
+
+function pruefungSimulationWaehlen() {
+  const teilbereich = document.getElementById("pruefungTeilbereichSelect").value;
+  const simulation = document.getElementById("pruefungSimulationSelect").value;
+  const fachBereich = document.getElementById("pruefungFachBereich");
+  const fachSelect = document.getElementById("pruefungFachSelect");
+
+  fachSelect.innerHTML = '<option value="">-- Prüfungsfach wählen --</option>';
+  document.getElementById("pruefungContainer").innerHTML = "";
+
+  if (!teilbereich || !simulation) {
+    fachBereich.style.display = "none";
+    document.getElementById("pruefungStatus").textContent =
+      "Bitte Simulation auswählen.";
+    return;
+  }
+
+  const faecher = pruefungsFaecherNachTeilbereich[teilbereich] || [];
+
+  faecher.forEach(function(eintrag) {
+    const option = document.createElement("option");
+    option.value = eintrag.fach;
+    option.textContent =
+      eintrag.fach + " – " + eintrag.zeit + " Minuten – " + eintrag.punkte + " Punkte";
+    option.dataset.zeit = eintrag.zeit;
+    option.dataset.punkte = eintrag.punkte;
+    fachSelect.appendChild(option);
+  });
+
+  fachBereich.style.display = "block";
+  document.getElementById("pruefungStatus").textContent =
+    "Simulation gewählt. Bitte Prüfungsfach auswählen.";
+}
+
+function startePruefungSimulation() {
+  const teilbereich = document.getElementById("pruefungTeilbereichSelect").value;
+  const simulation = document.getElementById("pruefungSimulationSelect").value;
+  const fach = document.getElementById("pruefungFachSelect").value;
+
+  if (!teilbereich) {
+    alert("Bitte zuerst einen Teilbereich auswählen.");
+    return;
+  }
+
+  if (!simulation) {
+    alert("Bitte zuerst eine Simulation auswählen.");
+    return;
+  }
+
+  if (!fach) {
+    alert("Bitte zuerst ein Prüfungsfach auswählen.");
+    return;
+  }
+
+  ladePruefungSimulation();
+}
     async function ladePruefungSimulation() {
 
   const box = document.getElementById("pruefungContainer");
