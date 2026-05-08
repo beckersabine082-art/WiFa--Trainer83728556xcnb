@@ -3108,8 +3108,7 @@ function startePruefungSimulation() {
   try {
 
     const response = await fetch(
-API_BASE_URL + "?action=getPruefungSimulation&fach=VWL/BWL"
-    );
+API_BASE_URL + "?action=getPruefungSimulation&fach=" + encodeURIComponent(document.getElementById("pruefungFachSelect").value)    );
 
     const result = await response.json();
 
