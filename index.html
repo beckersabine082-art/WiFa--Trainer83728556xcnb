@@ -3130,6 +3130,9 @@ API_BASE_URL + "?action=getPruefungSimulation&fach=" + encodeURIComponent(docume
 
     daten.forEach(function(item) {
 
+      if (letzteAufgabe !== "" && letzteAufgabe !== item.aufgabe) {
+  html += `</div>`;
+}
       if (letzteAufgabe !== item.aufgabe) {
 
         html += `
@@ -3185,6 +3188,7 @@ API_BASE_URL + "?action=getPruefungSimulation&fach=" + encodeURIComponent(docume
       `;
     });
 
+    html += `</div>`;
     box.innerHTML = html;
 
   } catch (error) {
