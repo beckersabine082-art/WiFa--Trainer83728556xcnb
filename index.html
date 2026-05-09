@@ -1175,60 +1175,69 @@ white-space: normal;
   </div>
 </section>
 
-    <div id="pruefungSimulationBereich" style="display:none; margin-top:15px;">
-      <label class="label" for="pruefungSimulationSelect">Simulation auswählen</label>
-      <select id="pruefungSimulationSelect" onchange="pruefungSimulationWaehlen()">
-        <option value="">-- Simulation wählen --</option>
-      </select>
-    </div>
+   <div id="pruefungSimulationBereich" style="display:none; margin-top:15px;">
+  <label class="label" for="pruefungSimulationSelect">
+    Simulation auswählen
+  </label>
 
-    <div id="pruefungFachBereich" style="display:none; margin-top:15px;">
-      <label class="label" for="pruefungFachSelect">Prüfungsfach auswählen</label>
-      <select id="pruefungFachSelect">
-        <option value="">-- Prüfungsfach wählen --</option>
-      </select>
-    </div>
+  <select id="pruefungSimulationSelect" onchange="pruefungSimulationWaehlen()">
+    <option value="">-- Simulation wählen --</option>
+  </select>
+</div>
 
-    <div class="button-row" style="margin-top:14px;">
-      <button class="action-btn" onclick="startePruefungSimulation()">
-        Prüfung starten
-      </button>
-    </div>
+<div id="pruefungFachBereich" style="display:none; margin-top:15px;">
+  <label class="label" for="pruefungFachSelect">
+    Prüfungsfach auswählen
+  </label>
 
-    <div class="status" id="pruefungStatus">
-      Bitte zuerst einen Teilbereich auswählen.
-    </div>
+  <select id="pruefungFachSelect">
+    <option value="">-- Prüfungsfach wählen --</option>
+  </select>
+</div>
+
+<div class="button-row" style="margin-top:14px;">
+  <button class="action-btn" onclick="startePruefungSimulation()">
+    Prüfung starten
+  </button>
+</div>
+
+<div class="status" id="pruefungStatus">
+  Bitte Simulation auswählen.
+</div>
+
+</div>
+
+<div class="card" id="pruefungTimerBox" style="display:none;">
+  <h2 class="section-title">Prüfungszeit</h2>
+
+  <div class="stat-value">
+    ⏳ <span id="pruefungTimerText">00:00</span>
   </div>
 
-  <div class="card" id="pruefungTimerBox" style="display:none;">
-    <h2 class="section-title">Prüfungszeit</h2>
-<div class="stat-value">
-  ⏳ <span id="pruefungTimerText">00:00</span>
-</div>
-    <div class="status" id="pruefungTimerStatus">Die Prüfung läuft.</div>
+  <div class="status" id="pruefungTimerStatus">
+    Die Prüfung läuft.
   </div>
 
-  <div id="pruefungContainer"></div>
-        <div id="pruefungTimerBox" class="timer-box" style="display:none;">
-  <span class="timer-icon">⏳</span>
-  <span id="pruefungTimerText">00:00</span>
+  <div class="button-row" style="margin-top:14px;">
+    <button
+      class="secondary-btn"
+      onclick="stoppePruefungTimer()"
+    >
+      Timer stoppen
+    </button>
+
+    <button
+      class="primary-btn"
+      onclick="pruefungManuellAbgeben()"
+    >
+      Prüfung abgeben
+    </button>
+  </div>
 </div>
-        <button
-  class="secondary-btn"
-  onclick="stoppePruefungTimer()"
-  style="margin-top:10px;"
->
-  Timer stoppen
-</button>
-        <button
-  class="primary-btn"
-  onclick="pruefungManuellAbgeben()"
-style="margin-top:10px; display:block; margin-left:auto; margin-right:auto;"
-          >
-  Prüfung abgeben
-</button>
+
+<div id="pruefungContainer"></div>
+
 </section>
-
      <section class="view" id="wissenView">
 
   <div class="header">
