@@ -3238,7 +3238,7 @@ if (minuten > 0) {
             ${item.frage}
           </div>
 
-        <textarea
+       <textarea
   class="input pruefung-antwort"
   rows="6"
   placeholder="Deine Antwort..."
@@ -3248,6 +3248,9 @@ if (minuten > 0) {
   data-fach="${escapeHtml(item.fach)}"
   data-thema="${escapeHtml(item.thema)}"
   data-punkte="${escapeHtml(item.punkte)}"
+  data-frage="${escapeHtml(item.frage)}"
+  data-musterloesung="${escapeHtml(item.musterloesung)}"
+  data-stichpunkte="${escapeHtml(item.stichpunkte)}"
 ></textarea>
 
         </div>
@@ -3588,9 +3591,9 @@ daten.push({
   teilaufgabe: teilaufgabe,
   fach: textarea.dataset.fach || "",
   thema: textarea.dataset.thema || "",
-  frage: passendeAufgabe?.frage || "",
-  musterloesung: passendeAufgabe?.musterloesung || "",
-  stichpunkte: passendeAufgabe?.stichpunkte || "",
+  frage: textarea.dataset.frage || "",
+musterloesung: textarea.dataset.musterloesung || "",
+stichpunkte: textarea.dataset.stichpunkte || "",
 maxPunkte: Number(
   textarea.dataset.punkte
   || passendeAufgabe?.punkte
