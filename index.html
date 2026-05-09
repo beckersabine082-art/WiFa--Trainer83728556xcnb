@@ -837,8 +837,21 @@ white-space: normal;
           <button class="nav-btn" id="navLernstand" onclick="zeigeBereich('lernstandView')">Lernstand</button>
           <button class="nav-btn" id="navGlossar" onclick="zeigeBereich('glossarView')">Glossar</button>
           <button class="nav-btn" id="navFormeln" onclick="zeigeBereich('formelView')">Formelsammlung</button>
-          <button class="nav-btn" id="navPruefung" onclick="zeigeBereich('pruefungView')">Prüfungssimulation</button>
-          <button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
+<div class="dropdown">
+  <button class="nav-btn" id="navPruefung" type="button" onclick="togglePruefungDropdown(event)">
+    Prüfungssimulation ▾
+  </button>
+
+  <div class="dropdown-content">
+    <button type="button" onclick="oeffnePruefungMitTeilbereich('WQ')">
+      WQ – Wirtschaftsbezogene Qualifikationen
+    </button>
+
+    <button type="button" onclick="oeffnePruefungMitTeilbereich('HQ')">
+      HQ – Handlungsspezifische Qualifikationen
+    </button>
+  </div>
+</div>          <button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
           <button class="nav-btn" id="navKilian" onclick="zeigeBereich('kilianView')">Frag Kilian</button>
           <button class="nav-btn" onclick="hinweisAnzeigen()">Nutzungshinweis</button>
         </div>
@@ -3662,6 +3675,25 @@ document.getElementById("pruefungStatus").innerHTML =
   });
 
   return await response.json();
+}
+    function togglePruefungDropdown(event) {
+  event.stopPropagation();
+
+  const dropdown =
+    document.getElementById("navPruefung").closest(".dropdown");
+
+  dropdown.classList.toggle("open");
+}
+
+function oeffnePruefungMitTeilbereich(teilbereich) {
+  zeigeBereich("pruefungView");
+
+  const select =
+    document.getElementById("pruefungTeilbereichSelect");
+
+  select.value = teilbereich;
+
+  pruefungTeilbereichWaehlen();
 }
   </script>
 </body>
