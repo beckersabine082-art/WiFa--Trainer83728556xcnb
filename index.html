@@ -1237,6 +1237,69 @@ white-space: normal;
 
 <div id="pruefungContainer"></div>
 
+    <section class="view" id="pruefungView">
+  <div class="header">
+    <h1>Prüfungssimulation</h1>
+    <p>Wähle oben im Menü WQ oder HQ, danach Simulation und Prüfungseinheit.</p>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Prüfung auswählen</h2>
+
+    <select id="pruefungTeilbereichSelect" style="display:none;" onchange="pruefungTeilbereichWaehlen()">
+      <option value="">-- Teilbereich wählen --</option>
+      <option value="WQ">WQ – Wirtschaftsbezogene Qualifikationen</option>
+      <option value="HQ">HQ – Handlungsspezifische Qualifikationen</option>
+    </select>
+
+    <div id="pruefungSimulationBereich" style="display:none; margin-top:15px;">
+      <label class="label" for="pruefungSimulationSelect">Simulation auswählen</label>
+      <select id="pruefungSimulationSelect" onchange="pruefungSimulationWaehlen()">
+        <option value="">-- Simulation wählen --</option>
+      </select>
+    </div>
+
+    <div id="pruefungFachBereich" style="display:none; margin-top:15px;">
+      <label class="label" for="pruefungFachSelect">Prüfungseinheit auswählen</label>
+      <select id="pruefungFachSelect">
+        <option value="">-- Prüfungseinheit wählen --</option>
+      </select>
+    </div>
+
+    <div class="button-row" style="margin-top:14px;">
+      <button class="action-btn" onclick="startePruefungSimulation()">
+        Prüfung starten
+      </button>
+    </div>
+
+    <div class="status" id="pruefungStatus">
+      Bitte oben im Menü WQ oder HQ auswählen.
+    </div>
+  </div>
+
+  <div class="card" id="pruefungTimerBox" style="display:none;">
+    <h2 class="section-title">Prüfungszeit</h2>
+
+    <div class="stat-value">
+      ⏳ <span id="pruefungTimerText">00:00</span>
+    </div>
+
+    <div class="status" id="pruefungTimerStatus">
+      Die Prüfung läuft.
+    </div>
+
+    <div class="button-row" style="margin-top:14px;">
+      <button class="secondary-btn" onclick="stoppePruefungTimer()">
+        Timer stoppen
+      </button>
+
+      <button class="action-btn" onclick="pruefungManuellAbgeben()">
+        Prüfung abgeben
+      </button>
+    </div>
+  </div>
+
+  <div id="pruefungContainer"></div>
 </section>
      <section class="view" id="wissenView">
 
