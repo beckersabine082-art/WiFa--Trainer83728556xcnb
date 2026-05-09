@@ -852,21 +852,7 @@ white-space: normal;
     </button>
   </div>
 </div>     
-<div class="dropdown">
-  <button class="nav-btn" id="navWissen" type="button" onclick="toggleWissenDropdown(event)">
-    Wissensdatenbank ▾
-  </button>
-
-  <div class="dropdown-content">
-    <button type="button" onclick="oeffneWissenMitTeilbereich('WQ')">
-      WQ – Wirtschaftsbezogene Qualifikationen
-    </button>
-
-    <button type="button" onclick="oeffneWissenMitTeilbereich('HQ')">
-      HQ – Handlungsspezifische Qualifikationen
-    </button>
-  </div>
-</div>
+<button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
           <button class="nav-btn" id="navKilian" onclick="zeigeBereich('kilianView')">Frag Kilian</button>
           <button class="nav-btn" onclick="hinweisAnzeigen()">Nutzungshinweis</button>
         </div>
@@ -1174,68 +1160,6 @@ white-space: normal;
     Öffne die Formelsammlung oder nutze die Suche.
   </div>
 </section>
-
-   <div id="pruefungSimulationBereich" style="display:none; margin-top:15px;">
-  <label class="label" for="pruefungSimulationSelect">
-    Simulation auswählen
-  </label>
-
-  <select id="pruefungSimulationSelect" onchange="pruefungSimulationWaehlen()">
-    <option value="">-- Simulation wählen --</option>
-  </select>
-</div>
-
-<div id="pruefungFachBereich" style="display:none; margin-top:15px;">
-  <label class="label" for="pruefungFachSelect">
-    Prüfungsfach auswählen
-  </label>
-
-  <select id="pruefungFachSelect">
-    <option value="">-- Prüfungsfach wählen --</option>
-  </select>
-</div>
-
-<div class="button-row" style="margin-top:14px;">
-  <button class="action-btn" onclick="startePruefungSimulation()">
-    Prüfung starten
-  </button>
-</div>
-
-<div class="status" id="pruefungStatus">
-  Bitte Simulation auswählen.
-</div>
-
-</div>
-
-<div class="card" id="pruefungTimerBox" style="display:none;">
-  <h2 class="section-title">Prüfungszeit</h2>
-
-  <div class="stat-value">
-    ⏳ <span id="pruefungTimerText">00:00</span>
-  </div>
-
-  <div class="status" id="pruefungTimerStatus">
-    Die Prüfung läuft.
-  </div>
-
-  <div class="button-row" style="margin-top:14px;">
-    <button
-      class="secondary-btn"
-      onclick="stoppePruefungTimer()"
-    >
-      Timer stoppen
-    </button>
-
-    <button
-      class="primary-btn"
-      onclick="pruefungManuellAbgeben()"
-    >
-      Prüfung abgeben
-    </button>
-  </div>
-</div>
-
-<div id="pruefungContainer"></div>
 
     <section class="view" id="pruefungView">
   <div class="header">
@@ -3765,25 +3689,6 @@ function oeffnePruefungMitTeilbereich(teilbereich) {
   select.value = teilbereich;
 
   pruefungTeilbereichWaehlen();
-}
-    function toggleWissenDropdown(event) {
-  event.stopPropagation();
-
-  const dropdown =
-    document.getElementById("navWissen").closest(".dropdown");
-
-  dropdown.classList.toggle("open");
-}
-
-function oeffneWissenMitTeilbereich(teilbereich) {
-  zeigeBereich("wissenView");
-
-  const select =
-    document.getElementById("kartenTeilbereichSelect");
-
-  select.value = teilbereich;
-
-  kartenTeilbereichWaehlen();
 }
   </script>
 </body>
