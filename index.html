@@ -3537,6 +3537,78 @@ function pruefungBeendenWegenZeitablauf() {
     "Prüfung beendet";
       startePruefungsAuswertung();
 }
+    function renderPruefungsAuswertung(data) {
+  const gesamtPunkte = Number(data.gesamtPunkte || 0);
+  const gesamtMaxPunkte = Number(data.gesamtMaxPunkte || 0);
+
+  const prozent =
+    gesamtMaxPunkte > 0
+      ? Math.round((gesamtPunkte / gesamtMaxPunkte) * 100)
+      : 0;
+
+  const bestanden = prozent >= 50;
+
+  let html = `
+    <div class="card">
+      <h2 class="section-title">Prüfungsauswertung</h2>
+
+      <div class="stat-value">
+        ${gesamtPunkte} / ${gesamtMaxPunkte} Punkte
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${prozent}%;"></div>
+      </div>
+
+      <div class="status">
+        Ergebnis: <strong>${prozent}%</strong><br>
+        Status:
+        <strong style="color:${bestanden ? "#16a34a" : "#dc2626"};">
+          ${bestanden ? "BESTANDEN" : "NICHT BESTANDEN"}
+        </strong>
+      </div>
+    </div>
+  `;
+
+  const aufgaben = data.aufgaben || [];
+
+  if (aufgaben.length) {
+    html += `
+      <div class="card">
+        <h2 class="section-title">Einzelbewertung</h2>
+    `;
+
+    aufgaben.forEach(function(item) {
+      html += `
+        <div class="result-mini-entry">
+          <div class="result-mini-head">
+            <div class="result-mini-title">
+              Aufgabe ${escapeHtml(item.aufgabe)}${escapeHtml(item.teilaufgabe)}
+            </div>
+            <div class="result-mini-score">
+              ${Number(item.punkte || 0)} / ${Number(item.maxPunkte || 0)} Punkte
+            </div>
+          </div>
+
+          <div style="font-size:13px; line-height:1.5; color:#5a4a80;">
+            <strong>Erkannte Stichpunkte:</strong><br>
+            ${(item.erkannte || []).length ? "- " + (item.erkannte || []).map(escapeHtml).join("<br>- ") : "- keine"}
+            <br><br>
+            <strong>Fehlende Stichpunkte:</strong><br>
+            ${(item.fehlende || []).length ? "- " + (item.fehlende || []).map(escapeHtml).join("<br>- ") : "- keine"}
+          </div>
+        </div>
+      `;
+    });
+
+    html += `</div>`;
+  }
+
+  document.getElementById("pruefungStatus").innerHTML =
+    "Prüfung abgeschlossen.";
+
+  document.getElementById("pruefungContainer").innerHTML += html;
+}
     function stoppePruefungTimer() {
 
   clearInterval(pruefungTimerInterval);
@@ -3642,19 +3714,7 @@ const prozent =
 const bestanden =
   prozent >= 50;
 
-document.getElementById("pruefungStatus").innerHTML =
-  `
-    <strong>Prüfung abgeschlossen</strong><br>
-    Punkte: ${gesamtPunkte} / ${gesamtMaxPunkte}<br>
-    Ergebnis: ${prozent}%<br>
-    Status:
-    <span style="
-      color:${bestanden ? "#16a34a" : "#dc2626"};
-      font-weight:700;
-    ">
-      ${bestanden ? "BESTANDEN" : "NICHT BESTANDEN"}
-    </span>
-  `;
+renderPruefungsAuswertung(bewertung?.data || {});
 }
     async function bewertePruefungsAntworten(daten) {
 
