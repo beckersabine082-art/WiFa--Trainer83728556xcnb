@@ -851,7 +851,22 @@ white-space: normal;
       HQ – Handlungsspezifische Qualifikationen
     </button>
   </div>
-</div>          <button class="nav-btn" id="navWissen" onclick="zeigeBereich('wissenView')">Wissensdatenbank</button>
+</div>     
+<div class="dropdown">
+  <button class="nav-btn" id="navWissen" type="button" onclick="toggleWissenDropdown(event)">
+    Wissensdatenbank ▾
+  </button>
+
+  <div class="dropdown-content">
+    <button type="button" onclick="oeffneWissenMitTeilbereich('WQ')">
+      WQ – Wirtschaftsbezogene Qualifikationen
+    </button>
+
+    <button type="button" onclick="oeffneWissenMitTeilbereich('HQ')">
+      HQ – Handlungsspezifische Qualifikationen
+    </button>
+  </div>
+</div>
           <button class="nav-btn" id="navKilian" onclick="zeigeBereich('kilianView')">Frag Kilian</button>
           <button class="nav-btn" onclick="hinweisAnzeigen()">Nutzungshinweis</button>
         </div>
@@ -3694,6 +3709,25 @@ function oeffnePruefungMitTeilbereich(teilbereich) {
   select.value = teilbereich;
 
   pruefungTeilbereichWaehlen();
+}
+    function toggleWissenDropdown(event) {
+  event.stopPropagation();
+
+  const dropdown =
+    document.getElementById("navWissen").closest(".dropdown");
+
+  dropdown.classList.toggle("open");
+}
+
+function oeffneWissenMitTeilbereich(teilbereich) {
+  zeigeBereich("wissenView");
+
+  const select =
+    document.getElementById("kartenTeilbereichSelect");
+
+  select.value = teilbereich;
+
+  kartenTeilbereichWaehlen();
 }
   </script>
 </body>
