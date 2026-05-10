@@ -821,6 +821,7 @@ white-space: normal;
   color: #2d1f46;
   font-family: Arial, sans-serif;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
   word-break: break-word;
 }
 
@@ -4044,14 +4045,20 @@ function oeffnePruefungMitTeilbereich(teilbereich) {
   pruefungTeilbereichWaehlen();
 
   function autoResizeTextarea(el) {
-    el.style.height = "42px";
-    el.style.height = el.scrollHeight + "px";
+  el.style.height = "auto";
+  el.style.height = Math.max(42, el.scrollHeight) + "px";
 
-    const td = el.closest("td");
+  const td = el.closest("td");
+  const tr = el.closest("tr");
 
-    if (td) {
-        td.style.height = el.scrollHeight + 16 + "px";
-    }
+  if (td) {
+    td.style.height = "auto";
+    td.style.verticalAlign = "top";
+  }
+
+  if (tr) {
+    tr.style.height = "auto";
+  }
 }
 
 document.addEventListener("input", function(e) {
