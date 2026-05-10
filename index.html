@@ -802,14 +802,17 @@ white-space: normal;
 }
     .pruefung-input {
   width: 100%;
-  min-height: 32px;
+  min-height: 42px;
   border: none;
-  background: transparent;
-  text-align: center;
+  background: #ffffff;
+  text-align: left;
   font-size: 14px;
-  padding: 4px;
+  padding: 8px;
   box-sizing: border-box;
   color: #2d1f46;
+  resize: vertical;
+  overflow-y: auto;
+  font-family: Arial, sans-serif;
 }
 
 .pruefung-input:focus {
@@ -3885,70 +3888,121 @@ document.addEventListener("click", function() {
   });
 });
    async function startePruefungsAuswertung() {
-  const antworten = document.querySelectorAll("#pruefungContainer textarea.pruefung-antwort");
-  const daten = [];
+  try {
+    const antworten = document.querySelectorAll("#pruefungContainer textarea.pruefung-antwort");
+    const daten = [];
 
-  antworten.forEach(function(textarea) {
-    const simulationId = textarea.dataset.simulationId || "";
-    const aufgabe = textarea.dataset.aufgabe || "";
-    const teilaufgabe = textarea.dataset.teilaufgabe || "";
+    antworten.forEach(function(textarea) {
+      const aufgabenBlock = textarea.closest("div");
 
-    const passendeAufgabe = aktuellePruefungsDaten.find(function(item) {
-      return String(item.simulationId) === String(simulationId)
-        && String(item.aufgabe) === String(aufgabe)
-        && String(item.teilaufgabe) === String(teilaufgabe);
+      const tabellenFelder = aufgabenBlock
+        ? aufgabenBlock.querySelectorAll(".pruefung-input")
+        : [];
+
+      let tabellenAntwort = "";
+
+      if (tabellenFelder.length) {
+        const tabellenWerte = [];
+
+        tabellenFelder.forEach(function(feld, index) {
+          const wert = String(feld.value || "").trim();
+
+          if (wert) {
+            const zeile = feld.closest("tr");
+            let zeilenTitel = "";
+
+            if (zeile) {
+              const ersteZelle = zeile.querySelector("td");
+              zeilenTitel = ersteZelle ? ersteZelle.textContent.trim() : "";
+            }
+
+            tabellenWerte.push(
+              (zeilenTitel ? zeilenTitel + ": " : "Tabellenfeld " + (index + 1) + ": ") + wert
+            );
+          }
+        });
+
+        if (tabellenWerte.length) {
+          tabellenAntwort =
+            "Tabelleneingaben:\n- " +
+            tabellenWerte.join("\n- ");
+        }
+      }
+
+      const freieAntwort = String(textarea.value || "").trim();
+
+      let kompletteAntwort = "";
+
+      if (tabellenAntwort && freieAntwort) {
+        kompletteAntwort = tabellenAntwort + "\n\nSchriftliche Ergänzung:\n" + freieAntwort;
+      } else if (tabellenAntwort) {
+        kompletteAntwort = tabellenAntwort;
+      } else {
+        kompletteAntwort = freieAntwort;
+      }
+
+      const simulationId = textarea.dataset.simulationId || "";
+      const aufgabe = textarea.dataset.aufgabe || "";
+      const teilaufgabe = textarea.dataset.teilaufgabe || "";
+
+      const passendeAufgabe = aktuellePruefungsDaten.find(function(item) {
+        return String(item.simulationId) === String(simulationId)
+          && String(item.aufgabe) === String(aufgabe)
+          && String(item.teilaufgabe) === String(teilaufgabe);
+      });
+
+      const index = textarea.dataset.index || "";
+      const fragetyp = textarea.dataset.fragetyp || "text";
+      let skizze = "";
+
+      if (fragetyp === "diagramm") {
+        const canvas = document.getElementById("skizze-" + index);
+        if (canvas) {
+          skizze = canvas.toDataURL("image/png");
+        }
+      }
+
+      daten.push({
+        simulationId: simulationId,
+        aufgabe: aufgabe,
+        teilaufgabe: teilaufgabe,
+        fach: textarea.dataset.fach || "",
+        thema: textarea.dataset.thema || "",
+        frage: textarea.dataset.frage || "",
+        fragetyp: fragetyp,
+        musterloesung: textarea.dataset.musterloesung || "",
+        stichpunkte: textarea.dataset.stichpunkte || "",
+        maxPunkte: Number(
+          textarea.dataset.punkte
+          || passendeAufgabe?.punkte
+          || 0
+        ),
+        antwort: kompletteAntwort,
+        skizze: skizze
+      });
     });
 
-    const index = textarea.dataset.index || "";
-    const fragetyp = textarea.dataset.fragetyp || "text";
-    let skizze = "";
+    letztePruefungsAntworten = daten;
 
-    if (fragetyp === "diagramm") {
-      const canvas = document.getElementById("skizze-" + index);
-      if (canvas) {
-        skizze = canvas.toDataURL("image/png");
-      }
+    document.getElementById("pruefungStatus").textContent =
+      "Prüfungsauswertung läuft...";
+
+    const bewertung = await bewertePruefungsAntworten(daten);
+
+    console.log("Bewertung:", bewertung);
+
+    if (!bewertung || bewertung.success !== true) {
+      throw new Error(bewertung?.error || "Unbekannter Fehler bei der Prüfungsauswertung.");
     }
 
-    daten.push({
-      simulationId: simulationId,
-      aufgabe: aufgabe,
-      teilaufgabe: teilaufgabe,
-      fach: textarea.dataset.fach || "",
-      thema: textarea.dataset.thema || "",
-      frage: textarea.dataset.frage || "",
-      fragetyp: fragetyp,
-      musterloesung: textarea.dataset.musterloesung || "",
-      stichpunkte: textarea.dataset.stichpunkte || "",
-      maxPunkte: Number(
-        textarea.dataset.punkte
-        || passendeAufgabe?.punkte
-        || 0
-      ),
-      antwort: String(textarea.value || "").trim(),
-      skizze: skizze
-    });
-  });
+    renderPruefungsAuswertung(bewertung.data || {});
 
-  const beantwortet = daten.filter(function(eintrag) {
-    return eintrag.antwort.length > 0 || eintrag.skizze.length > 0;
-  }).length;
+  } catch (error) {
+    document.getElementById("pruefungStatus").textContent =
+      "Fehler bei der Prüfungsauswertung: " + error.message;
 
-  document.getElementById("pruefungStatus").textContent =
-    "Prüfungsauswertung vorbereitet: "
-    + beantwortet
-    + " von "
-    + daten.length
-    + " Teilaufgaben bearbeitet.";
-
-  console.log("Prüfungsantworten:", daten);
-     letztePruefungsAntworten = daten;
-
-  const bewertung = await bewertePruefungsAntworten(daten);
-
-  console.log("Bewertung:", bewertung);
-
-  renderPruefungsAuswertung(bewertung?.data || {});
+    alert("Fehler bei der Prüfungsauswertung:\n\n" + error.message);
+  }
 }
     async function bewertePruefungsAntworten(daten) {
 
