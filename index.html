@@ -860,10 +860,6 @@ white-space: normal;
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-
-      textarea {
-        min-height: 220px;
-      }
     }
 
     @media (min-width: 800px) {
@@ -1027,8 +1023,8 @@ white-space: normal;
         <div class="card" id="subjectCard">
           <h2 class="section-title">Auswahl</h2>
 
-          <label class="label" for="teilbereichSelect">Teilbereich auswählen</label>
-          <select id="teilbereichSelect" onchange="waehleTeilbereich()">
+          <label class="label" for="teilbereichSelect" style="display:none;">Teilbereich auswählen</label>
+<select id="teilbereichSelect" onchange="waehleTeilbereich()" style="display:none;">
             <option value="">-- Teilbereich wählen --</option>
             <option value="WQ">Wirtschaftsbezogene Qualifikationen</option>
             <option value="HQ">Handlungsspezifische Qualifikationen</option>
@@ -4048,20 +4044,29 @@ function oeffnePruefungMitTeilbereich(teilbereich) {
   pruefungTeilbereichWaehlen();
 
   function autoResizeTextarea(el) {
-  el.style.height = "42px";
-  el.style.height = el.scrollHeight + "px";
+    el.style.height = "42px";
+    el.style.height = el.scrollHeight + "px";
+
+    const td = el.closest("td");
+
+    if (td) {
+        td.style.height = el.scrollHeight + 16 + "px";
+    }
 }
 
 document.addEventListener("input", function(e) {
-  if (e.target.tagName === "TEXTAREA") {
-    autoResizeTextarea(e.target);
-  }
+    if (
+        e.target.tagName === "TEXTAREA" ||
+        e.target.classList.contains("pruefung-input")
+    ) {
+        autoResizeTextarea(e.target);
+    }
 });
 
 window.addEventListener("load", function() {
-  document.querySelectorAll("textarea").forEach(function(el) {
-    autoResizeTextarea(el);
-  });
+    document.querySelectorAll("textarea, .pruefung-input").forEach(function(el) {
+        autoResizeTextarea(el);
+    });
 });
 }
   </script>
