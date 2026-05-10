@@ -3910,23 +3910,30 @@ document.addEventListener("click", function() {
       if (tabellenFelder.length) {
         const tabellenWerte = [];
 
-        tabellenFelder.forEach(function(feld, index) {
-          const wert = String(feld.value || "").trim();
+tabellenFelder.forEach(function(feld, index) {
 
-          if (wert) {
-            const zeile = feld.closest("tr");
-            let zeilenTitel = "";
+    const wert = String(feld.value || "").trim();
 
-            if (zeile) {
-              const ersteZelle = zeile.querySelector("td");
-              zeilenTitel = ersteZelle ? ersteZelle.textContent.trim() : "";
-            }
+    if (wert) {
 
-            tabellenWerte.push(
-              (zeilenTitel ? zeilenTitel + ": " : "Tabellenfeld " + (index + 1) + ": ") + wert
-            );
-          }
-        });
+        const zeile = feld.closest("tr");
+        let zeilenTitel = "";
+
+        if (zeile) {
+            const ersteZelle = zeile.querySelector("td");
+
+            zeilenTitel = ersteZelle
+                ? ersteZelle.textContent.trim()
+                : "";
+        }
+
+        tabellenWerte.push(
+            (zeilenTitel
+                ? zeilenTitel + " = " + wert
+                : "Tabellenfeld " + (index + 1) + " = " + wert)
+        );
+    }
+});
 
         if (tabellenWerte.length) {
           tabellenAntwort =
