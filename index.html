@@ -349,18 +349,23 @@
 white-space: normal;
     }
 
-    textarea {
-      width: 100%;
-      min-height: 180px;
-      resize: vertical;
-      border: 1px solid #d8c8f8;
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 16px;
-      font-family: Arial, sans-serif;
-      outline: none;
-      background: #fff;
-    }
+    textarea,
+.pruefung-antwort,
+.pruefung-input,
+#kilianFrage {
+    width: 100%;
+    min-height: 42px;
+    resize: none;
+    overflow: hidden;
+    border: 1px solid #d8c8f8;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    outline: none;
+    background: #fff;
+    box-sizing: border-box;
+}
 
     textarea:focus {
       border-color: #b794f6;
@@ -4037,6 +4042,23 @@ function oeffnePruefungMitTeilbereich(teilbereich) {
   select.value = teilbereich;
 
   pruefungTeilbereichWaehlen();
+
+  function autoResizeTextarea(el) {
+  el.style.height = "42px";
+  el.style.height = el.scrollHeight + "px";
+}
+
+document.addEventListener("input", function(e) {
+  if (e.target.tagName === "TEXTAREA") {
+    autoResizeTextarea(e.target);
+  }
+});
+
+window.addEventListener("load", function() {
+  document.querySelectorAll("textarea").forEach(function(el) {
+    autoResizeTextarea(el);
+  });
+});
 }
   </script>
 </body>
