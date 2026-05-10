@@ -3830,55 +3830,52 @@ document.addEventListener("click", function() {
 });
    async function startePruefungsAuswertung() {
   const antworten = document.querySelectorAll("#pruefungContainer textarea.pruefung-antwort");
-
   const daten = [];
 
   antworten.forEach(function(textarea) {
     const simulationId = textarea.dataset.simulationId || "";
-const aufgabe = textarea.dataset.aufgabe || "";
-const teilaufgabe = textarea.dataset.teilaufgabe || "";
+    const aufgabe = textarea.dataset.aufgabe || "";
+    const teilaufgabe = textarea.dataset.teilaufgabe || "";
 
-const passendeAufgabe = aktuellePruefungsDaten.find(function(item) {
-  return String(item.simulationId) === String(simulationId)
-    && String(item.aufgabe) === String(aufgabe)
-    && String(item.teilaufgabe) === String(teilaufgabe);
-});
+    const passendeAufgabe = aktuellePruefungsDaten.find(function(item) {
+      return String(item.simulationId) === String(simulationId)
+        && String(item.aufgabe) === String(aufgabe)
+        && String(item.teilaufgabe) === String(teilaufgabe);
+    });
 
-const index = textarea.dataset.index || "";
-const fragetyp = textarea.dataset.fragetyp || "text";
-let skizze = "";
+    const index = textarea.dataset.index || "";
+    const fragetyp = textarea.dataset.fragetyp || "text";
+    let skizze = "";
 
-if (fragetyp === "diagramm") {
-  const canvas = document.getElementById("skizze-" + index);
-  if (canvas) {
-    skizze = canvas.toDataURL("image/png");
-  }
-}
+    if (fragetyp === "diagramm") {
+      const canvas = document.getElementById("skizze-" + index);
+      if (canvas) {
+        skizze = canvas.toDataURL("image/png");
+      }
+    }
 
-daten.push({
-  simulationId: simulationId,
-  aufgabe: aufgabe,
-  teilaufgabe: teilaufgabe,
-  fach: textarea.dataset.fach || "",
-  thema: textarea.dataset.thema || "",
-  frage: textarea.dataset.frage || "",
-  fragetyp: fragetyp,
-  musterloesung: textarea.dataset.musterloesung || "",
-  stichpunkte: textarea.dataset.stichpunkte || "",
-  maxPunkte: Number(
-    textarea.dataset.punkte
-    || passendeAufgabe?.punkte
-    || 0
-  ),
-  antwort: String(textarea.value || "").trim(),
-  skizze: skizze
-});
-),  antwort: String(textarea.value || "").trim()
-});
+    daten.push({
+      simulationId: simulationId,
+      aufgabe: aufgabe,
+      teilaufgabe: teilaufgabe,
+      fach: textarea.dataset.fach || "",
+      thema: textarea.dataset.thema || "",
+      frage: textarea.dataset.frage || "",
+      fragetyp: fragetyp,
+      musterloesung: textarea.dataset.musterloesung || "",
+      stichpunkte: textarea.dataset.stichpunkte || "",
+      maxPunkte: Number(
+        textarea.dataset.punkte
+        || passendeAufgabe?.punkte
+        || 0
+      ),
+      antwort: String(textarea.value || "").trim(),
+      skizze: skizze
+    });
   });
 
   const beantwortet = daten.filter(function(eintrag) {
-    return eintrag.antwort.length > 0;
+    return eintrag.antwort.length > 0 || eintrag.skizze.length > 0;
   }).length;
 
   document.getElementById("pruefungStatus").textContent =
@@ -3886,30 +3883,15 @@ daten.push({
     + beantwortet
     + " von "
     + daten.length
-    + " Teilaufgaben beantwortet.";
+    + " Teilaufgaben bearbeitet.";
 
   console.log("Prüfungsantworten:", daten);
 
-const bewertung =
-  await bewertePruefungsAntworten(daten);
+  const bewertung = await bewertePruefungsAntworten(daten);
 
-console.log("Bewertung:", bewertung);
+  console.log("Bewertung:", bewertung);
 
-const gesamtPunkte =
-  Number(bewertung?.data?.gesamtPunkte || 0);
-
-const gesamtMaxPunkte =
-  Number(bewertung?.data?.gesamtMaxPunkte || 0);
-
-const prozent =
-  gesamtMaxPunkte > 0
-    ? Math.round((gesamtPunkte / gesamtMaxPunkte) * 100)
-    : 0;
-
-const bestanden =
-  prozent >= 50;
-
-renderPruefungsAuswertung(bewertung?.data || {});
+  renderPruefungsAuswertung(bewertung?.data || {});
 }
     async function bewertePruefungsAntworten(daten) {
 
