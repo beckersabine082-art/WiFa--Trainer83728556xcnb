@@ -2542,19 +2542,27 @@ const bewertungText = bereinigeBewertungText(
   }
 
     function bereinigeBewertungText(text) {
-  return String(text || "")
+  let sauber = String(text || "");
+
+  sauber = sauber
     .replace(/Erkannte Stichpunkte:[\s\S]*?(Fehlende Stichpunkte:|$)/gi, "")
-    .replace(/Fehlende Stichpunkte:[\s\S]*$/gi, "")
+    .replace(/Fehlende Stichpunkte:[\s\S]*$/gi, "");
+
+  sauber = sauber
+    .split("\n")
+    .filter(function(zeile) {
+      const z = zeile.trim();
+
+      if (!z) return false;
+      if (z.startsWith("-")) return false;
+
+      return true;
+    })
+    .join("\n")
     .trim();
+
+  return sauber || "Ergebnis wurde berechnet.";
 }
-  function escapeHtml(text) {
-    return String(text || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
 
     function formatKilianAntwort(text) {
   return String(text || "")
