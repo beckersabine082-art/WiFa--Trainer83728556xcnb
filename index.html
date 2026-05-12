@@ -2395,8 +2395,9 @@ if (daten.bilddatei) {
 
       const punkte = Number(data.punkte || 0);
       const maxPunkte = Number(data.maxPunkte || 0);
-      const bewertungText = data.ergebnis || "Keine Auswertung erhalten.";
-
+const bewertungText = bereinigeBewertungText(
+  data.ergebnis || "Keine Auswertung erhalten."
+);
       const punkteAnzeige = document.getElementById("punkteAnzeige");
       punkteAnzeige.textContent = punkte + " / " + maxPunkte + " Punkte";
       punkteAnzeige.classList.remove("good", "bad");
@@ -2540,6 +2541,12 @@ if (daten.bilddatei) {
     }).join("");
   }
 
+    function bereinigeBewertungText(text) {
+  return String(text || "")
+    .replace(/Erkannte Stichpunkte:[\s\S]*?(Fehlende Stichpunkte:|$)/gi, "")
+    .replace(/Fehlende Stichpunkte:[\s\S]*$/gi, "")
+    .trim();
+}
   function escapeHtml(text) {
     return String(text || "")
       .replace(/&/g, "&amp;")
@@ -3783,68 +3790,77 @@ function pruefungBeendenWegenZeitablauf() {
         <h2 class="section-title">Einzelbewertung</h2>
     `;
 
-    aufgaben.forEach(function(item) {
+    aufgaben.forEach(function(item, index) {
+      const eigeneAntwort = letztePruefungsAntworten.find(function(eintrag) {
+        return String(eintrag.aufgabe) === String(item.aufgabe)
+          && String(eintrag.teilaufgabe) === String(item.teilaufgabe);
+      }) || {};
 
-  const eigeneAntwort = letztePruefungsAntworten.find(function(eintrag) {
-    return String(eintrag.aufgabe) === String(item.aufgabe)
-      && String(eintrag.teilaufgabe) === String(item.teilaufgabe);
-  }) || {};
+      const musterloesung =
+        item.musterloesung ||
+        eigeneAntwort.musterloesung ||
+        "Keine Musterlösung hinterlegt.";
 
-  html += `
-    <div class="result-mini-entry">
+      html += `
+        <div class="result-mini-entry">
 
-      <div class="result-mini-head">
-        <div class="result-mini-title">
-          Aufgabe ${escapeHtml(item.aufgabe)}${escapeHtml(item.teilaufgabe)}
+          <div class="result-mini-head">
+            <div class="result-mini-title">
+              Aufgabe ${escapeHtml(item.aufgabe)}${escapeHtml(item.teilaufgabe)}
+            </div>
+
+            <div class="result-mini-score">
+              ${Number(item.punkte || 0)} / ${Number(item.maxPunkte || 0)} Punkte
+            </div>
+          </div>
+
+          <div style="font-size:13px; line-height:1.5; color:#5a4a80;">
+
+            <strong>Deine Antwort:</strong><br>
+            ${escapeHtml(eigeneAntwort.antwort || "keine schriftliche Ergänzung")}
+
+            <br><br>
+
+            ${eigeneAntwort.skizze ? `
+              <strong>Deine Skizze:</strong><br>
+
+              <img
+                src="${eigeneAntwort.skizze}"
+                style="
+                  max-width:100%;
+                  border:1px solid #d8c8f8;
+                  border-radius:12px;
+                  margin:8px 0 14px 0;
+                "
+              >
+
+              <br>
+            ` : ""}
+
+            <button
+              class="secondary-btn"
+              type="button"
+              onclick="togglePruefungsMusterloesung(${index})"
+              style="margin-top:10px;"
+            >
+              Musterlösung anzeigen
+            </button>
+
+            <div
+              class="solution-box"
+              id="pruefungMusterloesung-${index}"
+              style="display:none; margin-top:12px;"
+            >
+              <strong>Musterlösung:</strong><br>
+              ${escapeHtml(musterloesung)}
+            </div>
+
+          </div>
+
         </div>
+      `;
+    });
 
-        <div class="result-mini-score">
-          ${Number(item.punkte || 0)} / ${Number(item.maxPunkte || 0)} Punkte
-        </div>
-      </div>
-
-      <div style="font-size:13px; line-height:1.5; color:#5a4a80;">
-
-        <strong>Deine Antwort:</strong><br>
-        ${escapeHtml(eigeneAntwort.antwort || "keine schriftliche Ergänzung")}
-
-        <br><br>
-
-        ${eigeneAntwort.skizze ? `
-          <strong>Deine Skizze:</strong><br>
-
-          <img
-            src="${eigeneAntwort.skizze}"
-            style="
-              max-width:100%;
-              border:1px solid #d8c8f8;
-              border-radius:12px;
-              margin:8px 0 14px 0;
-            "
-          >
-
-          <br>
-        ` : ""}
-
-        <strong>Erkannte Stichpunkte:</strong><br>
-
-        ${(item.erkannte || []).length
-          ? "- " + (item.erkannte || []).map(escapeHtml).join("<br>- ")
-          : "- keine"}
-
-        <br><br>
-
-        <strong>Fehlende Stichpunkte:</strong><br>
-
-        ${(item.fehlende || []).length
-          ? "- " + (item.fehlende || []).map(escapeHtml).join("<br>- ")
-          : "- keine"}
-
-      </div>
-
-    </div>
-  `;
-});
     html += `</div>`;
   }
 
@@ -3852,6 +3868,13 @@ function pruefungBeendenWegenZeitablauf() {
     "Prüfung abgeschlossen.";
 
   document.getElementById("pruefungContainer").innerHTML += html;
+}
+    function togglePruefungsMusterloesung(index) {
+  const box = document.getElementById("pruefungMusterloesung-" + index);
+  if (!box) return;
+
+  box.style.display =
+    box.style.display === "none" ? "block" : "none";
 }
     function stoppePruefungTimer() {
 
