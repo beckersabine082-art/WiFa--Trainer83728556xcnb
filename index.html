@@ -351,7 +351,6 @@ white-space: normal;
 
     textarea,
 .pruefung-antwort,
-.pruefung-input,
 #kilianFrage {
     width: 100%;
     height: 42px;
@@ -1160,7 +1159,7 @@ white-space: normal;
 <div style="margin-top:12px;">
   <label class="label" for="glossarThemaFilter">Nach Thema filtern</label>
   <select id="glossarThemaFilter" onchange="filtereGlossar()">
-    <option value="">Alle Themen</option>
+<option value="">Alle Themen</option>
   </select>
 </div>
 
@@ -1195,19 +1194,8 @@ white-space: normal;
     >
 
     <div style="margin-top:12px;">
-      <label class="label" for="formelThemaFilter">Nach Thema filtern</label>
-      <select id="formelThemaFilter" onchange="filtereFormeln()">
-        <option value="">Alle Themen</option>
-      </select>
-    </div>
-
-    <div style="margin-top:12px;">
-      <label class="label" for="formelSchwierigkeitFilter">Nach Schwierigkeit filtern</label>
-      <select id="formelSchwierigkeitFilter" onchange="filtereFormeln()">
-        <option value="">Alle Schwierigkeiten</option>
-        <option value="leicht">leicht</option>
-        <option value="mittel">mittel</option>
-        <option value="schwer">schwer</option>
+<label class="label" for="formelThemaFilter">Nach Kapitel filtern</label>      <select id="formelThemaFilter" onchange="filtereFormeln()">
+        <option value="">Alle Kapitel</option>
       </select>
     </div>
 
@@ -1291,15 +1279,11 @@ white-space: normal;
 
   <div class="header">
     <h1>Wissensdatenbank</h1>
-
     <p>
       Hier entstehen zusätzliche Lernfunktionen wie Karteikarten,
       Audio-Lernen, Zusammenfassungen und spätere Kurzabfragen.
     </p>
   </div>
-
-  <div class="card">
-    <h2 class="section-title">Karteikarten</h2>
 
     <div>
 
@@ -1388,8 +1372,6 @@ white-space: normal;
 
 <div class="card">
   <h2 class="section-title">Geplante Erweiterungen</h2>
-  <div class="card">
-    <h2 class="section-title">Geplante Erweiterungen</h2>
 
     <div class="feature-grid">
 
@@ -3506,10 +3488,17 @@ function baueFormelFilter() {
   const themaSelect = document.getElementById("formelThemaFilter");
 
   const themen = [...new Set(formelDaten.map(function(eintrag) {
-    return String(eintrag.thema || "").trim();
+    const kapitel = String(eintrag.kapitel || "").trim();
+    const unterkapitel = String(eintrag.unterkapitel || "").trim();
+
+    if (unterkapitel) {
+      return kapitel + " / " + unterkapitel;
+    }
+
+    return kapitel;
   }).filter(Boolean))].sort();
 
-  themaSelect.innerHTML = '<option value="">Alle Themen</option>';
+  themaSelect.innerHTML = '<option value="">Alle Kapitel</option>';
 
   themen.forEach(function(thema) {
     const option = document.createElement("option");
@@ -3522,7 +3511,6 @@ function baueFormelFilter() {
 function resetFormelFilter() {
   document.getElementById("formelSuche").value = "";
   document.getElementById("formelThemaFilter").value = "";
-  document.getElementById("formelSchwierigkeitFilter").value = "";
 
   document.getElementById("formelStatus").textContent =
     formelDaten.length + " Formeln geladen.";
@@ -3533,7 +3521,6 @@ function resetFormelFilter() {
 function filtereFormeln() {
   const suche = String(document.getElementById("formelSuche").value || "").trim().toLowerCase();
   const themaFilter = String(document.getElementById("formelThemaFilter").value || "").trim().toLowerCase();
-  const schwierigkeitsFilter = String(document.getElementById("formelSchwierigkeitFilter").value || "").trim().toLowerCase();
 
   if (!formelDaten.length) {
     document.getElementById("formelListe").className = "result-list-empty";
@@ -3542,25 +3529,26 @@ function filtereFormeln() {
   }
 
   const treffer = formelDaten.filter(function(eintrag) {
+    const kapitelAnzeige = eintrag.unterkapitel
+      ? String(eintrag.kapitel || "") + " / " + String(eintrag.unterkapitel || "")
+      : String(eintrag.kapitel || "");
+
     const suchText = [
-      eintrag.thema,
-      eintrag.begriff,
-      eintrag.formel,
+      eintrag.fach,
+      eintrag.kapitel,
+      eintrag.unterkapitel,
+      eintrag.formelname,
+      eintrag.ihkSeite,
+      eintrag.ihkFormel,
+      eintrag.variablen,
       eintrag.erklaerung,
-      eintrag.beispiel,
-      eintrag.schwierigkeit,
-      eintrag.ihk2025,
-      eintrag.abkuerzungen
+      eintrag.beispiel
     ].join(" ").toLowerCase();
 
-    const thema = String(eintrag.thema || "").trim().toLowerCase();
-    const schwierigkeit = String(eintrag.schwierigkeit || "").trim().toLowerCase();
-
     const passtZurSuche = !suche || suchText.includes(suche);
-    const passtZumThema = !themaFilter || thema === themaFilter;
-    const passtZurSchwierigkeit = !schwierigkeitsFilter || schwierigkeit === schwierigkeitsFilter;
+    const passtZumThema = !themaFilter || kapitelAnzeige.toLowerCase() === themaFilter;
 
-    return passtZurSuche && passtZumThema && passtZurSchwierigkeit;
+    return passtZurSuche && passtZumThema;
   });
 
   document.getElementById("formelStatus").textContent =
@@ -3580,40 +3568,46 @@ function renderFormeln(daten) {
 
   liste.className = "";
   liste.innerHTML = daten.map(function(eintrag) {
+    const kapitelAnzeige = eintrag.unterkapitel
+      ? escapeHtml(eintrag.kapitel) + " / " + escapeHtml(eintrag.unterkapitel)
+      : escapeHtml(eintrag.kapitel);
+
     return `
       <div class="result-mini-entry">
         <div class="result-mini-head">
-          <div class="result-mini-title">${escapeHtml(eintrag.begriff)}</div>
-          <div class="result-mini-score">${escapeHtml(eintrag.schwierigkeit || "")}</div>
+          <div class="result-mini-title">${escapeHtml(eintrag.formelname)}</div>
+          <div class="result-mini-score">IHK S. ${escapeHtml(eintrag.ihkSeite || "-")}</div>
         </div>
 
-        <div style="font-size:16px; line-height:1.6; color:#2d1f46; margin-top:8px;">
-          <strong>Formel:</strong><br>
-          ${escapeHtml(eintrag.formel)}
+        <div class="result-mini-footer">
+          <span><strong>Fach:</strong> ${escapeHtml(eintrag.fach)}</span>
+          <span><strong>Kapitel:</strong> ${kapitelAnzeige}</span>
+        </div>
+
+        <div style="font-size:16px; line-height:1.6; color:#2d1f46; margin-top:10px;">
+          <strong>IHK-Formel:</strong><br>
+          ${escapeHtml(eintrag.ihkFormel)}
         </div>
 
         <div style="font-size:14px; line-height:1.6; color:#4a3970; margin-top:10px;">
-          <strong>Erklärung:</strong><br>
-          ${escapeHtml(eintrag.erklaerung)}
+          <strong>Variablen / Kürzel:</strong><br>
+          ${escapeHtml(eintrag.variablen || "keine hinterlegt")}
+        </div>
+
+        <div style="font-size:14px; line-height:1.6; color:#4a3970; margin-top:10px;">
+          <strong>Kurz-Erklärung:</strong><br>
+          ${escapeHtml(eintrag.erklaerung || "keine Erklärung hinterlegt")}
         </div>
 
         <div style="font-size:14px; line-height:1.6; color:#4a3970; margin-top:10px;">
           <strong>Beispiel:</strong><br>
           ${escapeHtml(eintrag.beispiel || "kein Beispiel hinterlegt")}
         </div>
-
-        <div class="result-mini-footer">
-          <span><strong>Thema:</strong> ${escapeHtml(eintrag.thema)}</span>
-          <span><strong>IHK 2025:</strong> ${escapeHtml(eintrag.ihk2025 || "offen")}</span>
-        </div>
-
-        <div style="margin-top:8px; font-size:13px; color:#5a4a80;">
-          <strong>Abkürzungen:</strong> ${escapeHtml(eintrag.abkuerzungen || "keine hinterlegt")}
-        </div>
       </div>
     `;
   }).join("");
 }
+
  function toggleKilianBubble() {
   const fenster = document.getElementById("kilianBubbleFenster");
 
@@ -4121,3 +4115,6 @@ window.addEventListener("load", function() {
     autoResizeTextarea(el);
   });
 });
+</script>
+</body>
+</html>
