@@ -1194,8 +1194,11 @@ white-space: normal;
     >
 
     <div style="margin-top:12px;">
-<label class="label" for="formelThemaFilter">Nach Fach filtern</label>        <option value="">Alle Kapitel</option>
-      </select>
+<label class="label" for="formelThemaFilter">Nach Fach filtern</label>
+
+<select id="formelThemaFilter" onchange="filtereFormeln()">
+  <option value="">Alle Fächer</option>
+</select>
     </div>
 
     <div class="button-row" style="margin-top:14px;">
