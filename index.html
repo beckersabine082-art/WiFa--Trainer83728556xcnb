@@ -1194,8 +1194,7 @@ white-space: normal;
     >
 
     <div style="margin-top:12px;">
-<label class="label" for="formelThemaFilter">Nach Kapitel filtern</label>      <select id="formelThemaFilter" onchange="filtereFormeln()">
-        <option value="">Alle Kapitel</option>
+<label class="label" for="formelThemaFilter">Nach Fach filtern</label>        <option value="">Alle Kapitel</option>
       </select>
     </div>
 
@@ -3487,23 +3486,16 @@ function zeichneAchsenvorlage(index) {
 function baueFormelFilter() {
   const themaSelect = document.getElementById("formelThemaFilter");
 
-  const themen = [...new Set(formelDaten.map(function(eintrag) {
-    const kapitel = String(eintrag.kapitel || "").trim();
-    const unterkapitel = String(eintrag.unterkapitel || "").trim();
-
-    if (unterkapitel) {
-      return kapitel + " / " + unterkapitel;
-    }
-
-    return kapitel;
+  const faecher = [...new Set(formelDaten.map(function(eintrag) {
+    return String(eintrag.fach || "").trim();
   }).filter(Boolean))].sort();
 
-  themaSelect.innerHTML = '<option value="">Alle Kapitel</option>';
+  themaSelect.innerHTML = '<option value="">Alle Fächer</option>';
 
-  themen.forEach(function(thema) {
+  faecher.forEach(function(fach) {
     const option = document.createElement("option");
-    option.value = thema;
-    option.textContent = thema;
+    option.value = fach;
+    option.textContent = fach;
     themaSelect.appendChild(option);
   });
 }
@@ -3546,8 +3538,7 @@ function filtereFormeln() {
     ].join(" ").toLowerCase();
 
     const passtZurSuche = !suche || suchText.includes(suche);
-    const passtZumThema = !themaFilter || kapitelAnzeige.toLowerCase() === themaFilter;
-
+const passtZumThema = !themaFilter || String(eintrag.fach || "").toLowerCase() === themaFilter;
     return passtZurSuche && passtZumThema;
   });
 
