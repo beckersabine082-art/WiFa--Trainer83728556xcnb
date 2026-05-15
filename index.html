@@ -4089,8 +4089,9 @@ function oeffnePruefungMitTeilbereich(teilbereich) {
   select.value = teilbereich;
 
   pruefungTeilbereichWaehlen();
+}
 
-  function autoResizeTextarea(el) {
+function autoResizeTextarea(el) {
   el.style.height = "auto";
   el.style.height = Math.max(42, el.scrollHeight) + "px";
 
@@ -4108,20 +4109,16 @@ function oeffnePruefungMitTeilbereich(teilbereich) {
 }
 
 document.addEventListener("input", function(e) {
-    if (
-        e.target.tagName === "TEXTAREA" ||
-        e.target.classList.contains("pruefung-input")
-    ) {
-        autoResizeTextarea(e.target);
-    }
+  if (
+    e.target.tagName === "TEXTAREA" ||
+    e.target.classList.contains("pruefung-input")
+  ) {
+    autoResizeTextarea(e.target);
+  }
 });
 
 window.addEventListener("load", function() {
-    document.querySelectorAll("textarea, .pruefung-input").forEach(function(el) {
-        autoResizeTextarea(el);
-    });
+  document.querySelectorAll("textarea, .pruefung-input").forEach(function(el) {
+    autoResizeTextarea(el);
+  });
 });
-}
-  </script>
-</body>
-</html>
