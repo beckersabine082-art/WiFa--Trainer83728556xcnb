@@ -3252,8 +3252,36 @@ function startePruefungSimulation() {
       return;
     }
 
-    let html = "";
+       let html = "";
     let letzteAufgabe = "";
+
+    const hauptSituation = String(
+      daten.find(function(item) {
+        return String(item.hauptsituation || "").trim();
+      })?.hauptsituation || ""
+    ).trim();
+
+    if (teilbereich === "HQ" && hauptSituation) {
+      html += `
+        <div class="card" style="margin-bottom:18px;">
+
+          <h2 class="section-title">
+            ${escapeHtml(einheit)}
+          </h2>
+
+          <div style="
+            background:#f4ecff;
+            padding:16px;
+            border-radius:14px;
+            line-height:1.7;
+            white-space:pre-wrap;
+          ">
+            ${escapeHtml(hauptSituation)}
+          </div>
+
+        </div>
+      `;
+    }
 
     daten.forEach(function(item, index) {
       const fragetyp = String(item.fragetyp || "text").trim().toLowerCase();
