@@ -2275,7 +2275,7 @@ const frageTextBox = document.getElementById("frageText");
 if (daten.aufgabenHtml) {
   frageTextBox.innerHTML = daten.aufgabenHtml;
 } else {
-  frageTextBox.textContent = aktuelleFrage;
+  frageTextBox.innerHTML = aktuelleFrage;
 }
 
 if (daten.bilddatei) {
