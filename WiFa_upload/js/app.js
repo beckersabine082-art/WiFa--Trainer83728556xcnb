@@ -652,16 +652,16 @@ if (daten.bilddatei) {
   }
 
   async function bewerteAntwort() {
-    if (appIstBeschaeftigt) return;
+  if (appIstBeschaeftigt) return;
 
-    const antwort = document.getElementById("antwortInput").value.trim();
-alert("Fragetyp: " + aktuellerFragetyp + "\nLösungsschlüssel: " + aktuellerLoesungsschluessel);
+  const ankreuzCheckboxen = document.querySelectorAll("#frageText input[type='checkbox']");
 
-if (aktuellerFragetyp === "ANKREUZ") {
-  bewerteAnkreuzAntwort();
-  return;
-}
+  if (aktuellerFragetyp === "ANKREUZ" || ankreuzCheckboxen.length > 0) {
+    bewerteAnkreuzAntwort();
+    return;
+  }
 
+  const antwort = document.getElementById("antwortInput").value.trim();
     if (!aktuellerTeilbereich) {
       alert("Bitte zuerst einen Teilbereich auswählen.");
       return;
