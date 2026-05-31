@@ -31,6 +31,8 @@
   let aktuelleMusterloesung = "";
   let aktuelleStichpunkte = [];
   let aktuelleFrageId = "";
+  let aktuellerFragetyp = "TEXT";
+  let aktuellerLoesungsschluessel = "";
   let ladeToken = 0;
   let appIstBeschaeftigt = false;
 
@@ -564,12 +566,14 @@ function renderGlossar(daten) {
   })
   .filter(Boolean);
       aktuelleFrageId = daten.id || "";
+aktuellerFragetyp = String(daten.fragetyp || "TEXT").trim().toUpperCase();
+aktuellerLoesungsschluessel = String(daten.loesungsschluessel || "").trim();
 
 const frageTextBox = document.getElementById("frageText");
 const antwortLabel = document.querySelector('label[for="antwortInput"]');
 const antwortInput = document.getElementById("antwortInput");
 
-const fragetyp = String(daten.fragetyp || "TEXT").trim().toUpperCase();
+const fragetyp = aktuellerFragetyp;
 const aufgabenHtml = String(daten.aufgabenHtml || "").trim();
 
 let frageHtml = "";
@@ -651,6 +655,11 @@ if (daten.bilddatei) {
     if (appIstBeschaeftigt) return;
 
     const antwort = document.getElementById("antwortInput").value.trim();
+
+if (aktuellerFragetyp === "ANKREUZ") {
+  bewerteAnkreuzAntwort();
+  return;
+}
 
     if (!aktuellerTeilbereich) {
       alert("Bitte zuerst einen Teilbereich auswählen.");
@@ -746,6 +755,52 @@ const bewertungText = bereinigeBewertungText(
     }
   }
 
+function bewerteAnkreuzAntwort() {
+  const checkboxes = document.querySelectorAll("#frageText input[type='checkbox']");
+  const loesungen = String(aktuellerLoesungsschluessel || "")
+    .split(";")
+    .map(function(eintrag) {
+      const teile = eintrag.split("=");
+      return {
+        index: Number(teile[0]),
+        wert: String(teile[1] || "").trim().toLowerCase() === "true"
+      };
+    })
+    .filter(function(eintrag) {
+      return eintrag.index > 0;
+    });
+
+  if (!checkboxes.length || !loesungen.length) {
+    alert("Für diese Ankreuzaufgabe fehlen Checkboxen oder Lösungsschlüssel.");
+    return;
+  }
+
+  let punkte = 0;
+  const maxPunkte = loesungen.length;
+
+  loesungen.forEach(function(loesung) {
+    const checkbox = checkboxes[loesung.index - 1];
+    if (!checkbox) return;
+
+    if (checkbox.checked === loesung.wert) {
+      punkte++;
+    }
+  });
+
+  document.getElementById("resultBox").style.display = "block";
+
+  const punkteAnzeige = document.getElementById("punkteAnzeige");
+  punkteAnzeige.textContent = punkte + " / " + maxPunkte + " Punkte";
+  punkteAnzeige.classList.remove("good", "bad");
+  punkteAnzeige.classList.add(punkte >= maxPunkte / 2 ? "good" : "bad");
+
+  document.getElementById("ergebnisText").textContent =
+    punkte === maxPunkte
+      ? "vollständig richtig"
+      : punkte >= maxPunkte / 2
+        ? "teilweise richtig"
+        : "unzureichend";
+}
   function verbucheSessionErgebnis(fach, frageId, punkte, maxPunkte) {
     if (!fach || !frageId) return;
 
