@@ -655,6 +655,7 @@ if (daten.bilddatei) {
     if (appIstBeschaeftigt) return;
 
     const antwort = document.getElementById("antwortInput").value.trim();
+alert("Fragetyp: " + aktuellerFragetyp + "\nLösungsschlüssel: " + aktuellerLoesungsschluessel);
 
 if (aktuellerFragetyp === "ANKREUZ") {
   bewerteAnkreuzAntwort();
