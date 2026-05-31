@@ -673,11 +673,32 @@ if (!antwort && trainerInputs.length > 0) {
     const wert = String(input.value || "").trim();
 
     if (wert) {
-      const zeile = input.closest("tr");
-      const ersteZelle = zeile ? zeile.querySelector("td") : null;
-      const zeilenTitel = ersteZelle ? ersteZelle.textContent.trim() : "Feld " + (index + 1);
+     const zelle = input.closest("td");
+const zeile = input.closest("tr");
+const tabelle = input.closest("table");
 
-      werte.push(zeilenTitel + ": " + wert);
+const zellen = zeile ? Array.from(zeile.children) : [];
+const spaltenIndex = zelle ? zellen.indexOf(zelle) : -1;
+
+const ersteZelle = zeile ? zeile.querySelector("td") : null;
+const zeilenTitel = ersteZelle ? ersteZelle.textContent.trim() : "Feld " + (index + 1);
+
+let spaltenTitel = "";
+
+if (tabelle && spaltenIndex >= 0) {
+  const kopfZeile = tabelle.querySelector("tr");
+  const kopfZellen = kopfZeile ? Array.from(kopfZeile.children) : [];
+  spaltenTitel = kopfZellen[spaltenIndex]
+    ? kopfZellen[spaltenIndex].textContent.trim()
+    : "";
+}
+
+werte.push(
+  (spaltenTitel ? spaltenTitel + " - " : "") +
+  zeilenTitel +
+  ": " +
+  wert
+);
     }
   });
 
