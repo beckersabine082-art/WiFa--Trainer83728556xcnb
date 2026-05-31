@@ -540,6 +540,7 @@ function renderGlossar(daten) {
       }
 
       const daten = result.data || {};
+resetFrageAnzeige();
 
       if (!daten.id) {
         aktuelleFrage = "";
@@ -661,7 +662,27 @@ if (daten.bilddatei) {
     return;
   }
 
-  const antwort = document.getElementById("antwortInput").value.trim();
+  let antwort = document.getElementById("antwortInput").value.trim();
+
+const trainerInputs = document.querySelectorAll("#frageText input[type='text'], #frageText textarea, #frageText select");
+
+if (!antwort && trainerInputs.length > 0) {
+  const werte = [];
+
+  trainerInputs.forEach(function(input, index) {
+    const wert = String(input.value || "").trim();
+
+    if (wert) {
+      const zeile = input.closest("tr");
+      const ersteZelle = zeile ? zeile.querySelector("td") : null;
+      const zeilenTitel = ersteZelle ? ersteZelle.textContent.trim() : "Feld " + (index + 1);
+
+      werte.push(zeilenTitel + ": " + wert);
+    }
+  });
+
+  antwort = werte.join("\n");
+}
     if (!aktuellerTeilbereich) {
       alert("Bitte zuerst einen Teilbereich auswählen.");
       return;
