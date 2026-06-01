@@ -661,6 +661,10 @@ if (daten.bilddatei) {
     bewerteAnkreuzAntwort();
     return;
   }
+if (aktuellerFragetyp === "ZUORDNUNG") {
+  bewerteZuordnungAntwort();
+  return;
+}
 
   let antwort = document.getElementById("antwortInput").value.trim();
 
@@ -797,6 +801,57 @@ const bewertungText = bereinigeBewertungText(
       setzeAppBeschaeftigt(false);
     }
   }
+
+function bewerteZuordnungAntwort() {
+  const inputs = document.querySelectorAll("#frageText input[type='text'], #frageText textarea");
+  const loesung = String(aktuellerLoesungsschluessel || "").trim();
+
+  if (!inputs.length || !loesung) {
+    alert("Für diese Zuordnungsaufgabe fehlen Eingabefelder oder Lösungsschlüssel.");
+    return;
+  }
+
+  const loesungen = loesung.split(";").map(function(eintrag) {
+    const teile = eintrag.split("=");
+    return {
+      begriff: String(teile[0] || "").trim().toLowerCase(),
+      wert: String(teile[1] || "").trim().toLowerCase()
+    };
+  });
+
+  let punkte = 0;
+  const maxPunkte = loesungen.length;
+
+  inputs.forEach(function(input) {
+    const zeile = input.closest("tr");
+    const begriffZelle = zeile ? zeile.querySelector("td") : null;
+
+    const begriff = begriffZelle ? begriffZelle.textContent.trim().toLowerCase() : "";
+    const antwort = String(input.value || "").trim().toLowerCase();
+
+    const passendeLoesung = loesungen.find(function(l) {
+      return l.begriff === begriff;
+    });
+
+    if (passendeLoesung && antwort === passendeLoesung.wert) {
+      punkte++;
+    }
+  });
+
+  document.getElementById("resultBox").style.display = "block";
+
+  const punkteAnzeige = document.getElementById("punkteAnzeige");
+  punkteAnzeige.textContent = punkte + " / " + maxPunkte + " Punkte";
+  punkteAnzeige.classList.remove("good", "bad");
+  punkteAnzeige.classList.add(punkte >= maxPunkte / 2 ? "good" : "bad");
+
+  document.getElementById("ergebnisText").textContent =
+    punkte === maxPunkte
+      ? "vollständig richtig"
+      : punkte >= maxPunkte / 2
+        ? "teilweise richtig"
+        : "unzureichend";
+}
 
 function bewerteAnkreuzAntwort() {
   const checkboxes = document.querySelectorAll("#frageText input[type='checkbox']");
