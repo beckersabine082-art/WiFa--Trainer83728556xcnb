@@ -597,6 +597,10 @@ if (fragetyp === "TEXT") {
   if (antwortLabel) antwortLabel.style.display = "block";
   antwortInput.style.display = "block";
   antwortInput.placeholder = "Trage hier deinen Rechenweg oder deine Ergänzung ein...";
+} else if (fragetyp === "LUECKENTEXT") {
+  if (antwortLabel) antwortLabel.style.display = "none";
+  antwortInput.style.display = "none";
+  antwortInput.value = "";
 } else {
   if (antwortLabel) antwortLabel.style.display = "none";
   antwortInput.style.display = "none";
