@@ -772,10 +772,7 @@ const bewertungText = bereinigeBewertungText(
 
       document.getElementById("ergebnisText").textContent = bewertungText;
 
-      if (data.musterloesung) {
-  aktuelleMusterloesung = data.musterloesung;
-}
-      document.getElementById("solutionBox").style.display = "none";
+           document.getElementById("solutionBox").style.display = "none";
       document.getElementById("musterloesungText").textContent = "";
 
       verbucheSessionErgebnis(
