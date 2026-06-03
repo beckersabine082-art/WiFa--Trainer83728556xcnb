@@ -901,14 +901,10 @@ function bewerteLueckentextAntwort() {
         ? "teilweise richtig"
         : "unzureichend";
 
-  aktuelleMusterloesung = loesungen
-    .map(function(loesung, index) {
-      return (index + 1) + ". " + loesung;
-    })
-    .join("\n");
-
   document.getElementById("solutionBox").style.display = "block";
-  document.getElementById("musterloesungText").textContent = aktuelleMusterloesung;
+document.getElementById("musterloesungText").innerHTML =
+  hebeStichpunkteHervor(aktuelleMusterloesung, []);
+
 }
 
 function bewerteAnkreuzAntwort() {
