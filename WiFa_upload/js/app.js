@@ -737,6 +737,11 @@ werte.push(
       return;
     }
 
+if (aktuellerFragetyp === "LUECKENTEXT") {
+  bewerteLueckentextAntwort();
+  return;
+}
+
     try {
       setzeAppBeschaeftigt(true);
       setzeStatus("Antwort wird ausgewertet...");
@@ -855,6 +860,56 @@ function bewerteZuordnungAntwort() {
       : punkte >= maxPunkte / 2
         ? "teilweise richtig"
         : "unzureichend";
+}
+
+function bewerteLueckentextAntwort() {
+  const inputs = document.querySelectorAll("#frageText input[type='text']");
+  const loesungen = String(aktuellerLoesungsschluessel || "")
+    .split("|")
+    .map(function(eintrag) {
+      return eintrag.trim().toLowerCase();
+    })
+    .filter(Boolean);
+
+  if (!inputs.length || !loesungen.length) {
+    alert("Für diese Lückentextaufgabe fehlen Eingabefelder oder Lösungsschlüssel.");
+    return;
+  }
+
+  let punkte = 0;
+  const maxPunkte = loesungen.length;
+
+  inputs.forEach(function(input, index) {
+    const antwort = String(input.value || "").trim().toLowerCase();
+    const richtigeLoesung = loesungen[index] || "";
+
+    if (antwort === richtigeLoesung) {
+      punkte++;
+    }
+  });
+
+  document.getElementById("resultBox").style.display = "block";
+
+  const punkteAnzeige = document.getElementById("punkteAnzeige");
+  punkteAnzeige.textContent = punkte + " / " + maxPunkte + " Punkte";
+  punkteAnzeige.classList.remove("good", "bad");
+  punkteAnzeige.classList.add(punkte >= maxPunkte / 2 ? "good" : "bad");
+
+  document.getElementById("ergebnisText").textContent =
+    punkte === maxPunkte
+      ? "vollständig richtig"
+      : punkte >= maxPunkte / 2
+        ? "teilweise richtig"
+        : "unzureichend";
+
+  aktuelleMusterloesung = loesungen
+    .map(function(loesung, index) {
+      return (index + 1) + ". " + loesung;
+    })
+    .join("\n");
+
+  document.getElementById("solutionBox").style.display = "block";
+  document.getElementById("musterloesungText").textContent = aktuelleMusterloesung;
 }
 
 function bewerteAnkreuzAntwort() {
