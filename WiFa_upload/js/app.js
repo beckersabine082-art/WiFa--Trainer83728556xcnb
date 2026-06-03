@@ -772,7 +772,9 @@ const bewertungText = bereinigeBewertungText(
 
       document.getElementById("ergebnisText").textContent = bewertungText;
 
-      aktuelleMusterloesung = data.musterloesung || "";
+      if (data.musterloesung) {
+  aktuelleMusterloesung = data.musterloesung;
+}
       document.getElementById("solutionBox").style.display = "none";
       document.getElementById("musterloesungText").textContent = "";
 
