@@ -901,9 +901,8 @@ function bewerteLueckentextAntwort() {
         ? "teilweise richtig"
         : "unzureichend";
 
-  document.getElementById("solutionBox").style.display = "block";
-document.getElementById("musterloesungText").innerHTML =
-  hebeStichpunkteHervor(aktuelleMusterloesung, []);
+  document.getElementById("solutionBox").style.display = "none";
+  document.getElementById("musterloesungText").textContent = "";
 
 }
 
