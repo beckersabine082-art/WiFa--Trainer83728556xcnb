@@ -811,7 +811,7 @@ const bewertungText = bereinigeBewertungText(
   }
 
 function bewerteZuordnungAntwort() {
-  const inputs = document.querySelectorAll("#frageText input[type='text'], #frageText textarea");
+  const inputs = document.querySelectorAll("#frageText input[type='text'], #frageText textarea, #frageText select");
   const loesung = String(aktuellerLoesungsschluessel || "").trim();
 
   if (!inputs.length || !loesung) {
@@ -819,29 +819,30 @@ function bewerteZuordnungAntwort() {
     return;
   }
 
-  const loesungen = loesung.split(";").map(function(eintrag) {
-    const teile = eintrag.split("=");
-    return {
-      begriff: String(teile[0] || "").trim().toLowerCase(),
-      wert: String(teile[1] || "").trim().toLowerCase()
-    };
-  });
+  function normalisiere(text) {
+    return String(text || "")
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  const loesungen = loesung
+    .split(";")
+    .map(function(eintrag) {
+      return normalisiere(eintrag);
+    })
+    .filter(Boolean);
 
   let punkte = 0;
-  const maxPunkte = loesungen.length;
+  const maxPunkte = Math.min(inputs.length, loesungen.length);
 
-  inputs.forEach(function(input) {
-    const zeile = input.closest("tr");
-    const begriffZelle = zeile ? zeile.querySelector("td") : null;
+  inputs.forEach(function(input, index) {
+    if (index >= loesungen.length) return;
 
-    const begriff = begriffZelle ? begriffZelle.textContent.trim().toLowerCase() : "";
-    const antwort = String(input.value || "").trim().toLowerCase();
+    const antwort = normalisiere(input.value);
+    const richtigeLoesung = loesungen[index];
 
-    const passendeLoesung = loesungen.find(function(l) {
-      return l.begriff === begriff;
-    });
-
-    if (passendeLoesung && antwort === passendeLoesung.wert) {
+    if (antwort === richtigeLoesung) {
       punkte++;
     }
   });
@@ -860,7 +861,6 @@ function bewerteZuordnungAntwort() {
         ? "teilweise richtig"
         : "unzureichend";
 }
-
 function bewerteLueckentextAntwort() {
   const inputs = document.querySelectorAll("#frageText input[type='text']");
   const loesungen = String(aktuellerLoesungsschluessel || "")
